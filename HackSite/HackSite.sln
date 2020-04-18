@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HackSite", "HackSite\HackSite.csproj", "{2723CFBF-5930-4904-8ADD-F0433D85600F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserManagement", "UserManagement\UserManagement.csproj", "{967EB8C2-3A78-421D-A3F1-900315A34195}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserManagement.Abstractions", "UserManagement.Abstractions\UserManagement.Abstractions.csproj", "{E1CA10D5-A56C-4F6E-9E77-5F2F7B6496A8}"
@@ -13,9 +11,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageProviders", "Storage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StorageProviders.Abstractions", "StorageManagement.Abstractions\StorageProviders.Abstractions.csproj", "{6A5C777F-23EB-4F53-B984-31280BA5862D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManagement", "FileManagement\FileManagement.csproj", "{C81F6068-E171-4272-9BA1-B814691D43F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManagement", "FileManagement\FileManagement.csproj", "{C81F6068-E171-4272-9BA1-B814691D43F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManagement.Abstractions", "FileManagement.Abstractions\FileManagement.Abstractions.csproj", "{E6C3E734-21A7-43F3-830C-26CC3031584D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManagement.Abstractions", "FileManagement.Abstractions\FileManagement.Abstractions.csproj", "{E6C3E734-21A7-43F3-830C-26CC3031584D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackSite.Server", "HackSite\Server\HackSite.Server.csproj", "{4C4399A8-059C-4EA5-8A5C-ED021EBB76D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackSite.Client", "HackSite\Client\HackSite.Client.csproj", "{E89857F4-82DE-4F1C-87D0-114DEF5C9AB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HackSite.Shared", "HackSite\Shared\HackSite.Shared.csproj", "{7EBDA571-6A03-4E93-9D06-D66B8AB26E02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +27,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2723CFBF-5930-4904-8ADD-F0433D85600F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2723CFBF-5930-4904-8ADD-F0433D85600F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2723CFBF-5930-4904-8ADD-F0433D85600F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2723CFBF-5930-4904-8ADD-F0433D85600F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{967EB8C2-3A78-421D-A3F1-900315A34195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{967EB8C2-3A78-421D-A3F1-900315A34195}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{967EB8C2-3A78-421D-A3F1-900315A34195}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +51,18 @@ Global
 		{E6C3E734-21A7-43F3-830C-26CC3031584D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6C3E734-21A7-43F3-830C-26CC3031584D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6C3E734-21A7-43F3-830C-26CC3031584D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C4399A8-059C-4EA5-8A5C-ED021EBB76D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C4399A8-059C-4EA5-8A5C-ED021EBB76D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C4399A8-059C-4EA5-8A5C-ED021EBB76D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C4399A8-059C-4EA5-8A5C-ED021EBB76D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E89857F4-82DE-4F1C-87D0-114DEF5C9AB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E89857F4-82DE-4F1C-87D0-114DEF5C9AB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E89857F4-82DE-4F1C-87D0-114DEF5C9AB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E89857F4-82DE-4F1C-87D0-114DEF5C9AB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EBDA571-6A03-4E93-9D06-D66B8AB26E02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EBDA571-6A03-4E93-9D06-D66B8AB26E02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EBDA571-6A03-4E93-9D06-D66B8AB26E02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EBDA571-6A03-4E93-9D06-D66B8AB26E02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

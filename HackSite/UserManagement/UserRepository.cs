@@ -1,5 +1,4 @@
 ﻿using StorageProviders.Abstractions;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UserManagement.Abstractions;
@@ -10,22 +9,20 @@ namespace UserManagement
     public class UserRepository : IUserRepository
     {
         private readonly ITableStorageProvider<User> _tableStorageProvider;
-        private readonly IFileStorageProvider _blobStorageProvider;
-        public UserRepository(ITableStorageProvider<User> tableStorageProvider, IFileStorageProvider blobStorageProvider)
+
+        public UserRepository(ITableStorageProvider<User> tableStorageProvider)
         {
             _tableStorageProvider = tableStorageProvider;
-            _blobStorageProvider = blobStorageProvider;
         }
 
         public async Task<User> CreateUserAsync(string username)
         {
-            var blobKey = await  _blobStorageProvider.CreateStorageAsync(username);
 
             var user = new User
             {
                 Username = username,
-                StroageAddress = blobKey
             };
+
             return await _tableStorageProvider.CreateAsync(user);
         }
 
@@ -36,7 +33,7 @@ namespace UserManagement
 
         public async Task<List<User>> GetUsersAsync()
         {
-            throw new NotImplementedException();
+            return await _tableStorageProvider.ReadAllAsync();
         }
     }
 }

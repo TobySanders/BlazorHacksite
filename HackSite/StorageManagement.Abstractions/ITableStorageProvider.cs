@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StorageProviders.Abstractions
 {
@@ -7,6 +8,7 @@ namespace StorageProviders.Abstractions
         Task<TModel> CreateAsync(TModel model);
         Task<TModel> UpdateAsync(TModel model);
         Task<TModel> ReadAsync(string key);
+        Task<List<TModel>> ReadAllAsync();
         Task DeleteAsync(string key);
     }
 }

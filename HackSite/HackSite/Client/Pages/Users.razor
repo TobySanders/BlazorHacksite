@@ -1,0 +1,43 @@
+@page "/users"
+@using HackSite.Shared
+@inject HttpClient Http
+
+<h1>Users</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (users == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    System.Diagnostics.Debug.WriteLine(users[0].username);
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.username</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private UserView[] users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await Http.GetFromJsonAsync<UserView[]>("Users");
+        Console.WriteLine(users);
+    }
+
+}

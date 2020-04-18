@@ -5,6 +5,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using Microsoft.Extensions.Options;
 using StorageProviders.Abstractions;
 using StorageProviders.Abstractions.Models;
+using System.Collections.Generic;
 
 namespace StorageProviders
 {
@@ -66,5 +67,9 @@ namespace StorageProviders
             await usersTable.ExecuteAsync(deleteOperation);
         }
 
+        public Task<List<User>> ReadAllAsync()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
