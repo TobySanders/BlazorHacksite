@@ -27,7 +27,7 @@ else
             <tr>
                 <td>@team.Id</td>
                 <td>@team.Name</td>
-                <td>@team.Members.ToString()</td>
+                <td>@team.Members?.ToString()</td>
                 <td>@team.Project.Title</td>
             </tr>
             }
