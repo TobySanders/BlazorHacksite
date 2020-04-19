@@ -17,7 +17,6 @@ namespace StorageProviders.Abstractions.Models
         public UserTableEntity(User user)
         {
             Username = user.Username;
-            BlobKey = user.StroageAddress;
             PartitionKey = "User";
             RowKey = Username;
         }

@@ -1,4 +1,4 @@
-@page "/users"
+@page "/userControls"
 @using HackSite.Shared
 @inject HttpClient Http
 
@@ -12,7 +12,7 @@
 }
 else
 {
-    System.Diagnostics.Debug.WriteLine(users[0].username);
+    System.Diagnostics.Debug.WriteLine(users[0].Username);
 
     <table class="table">
         <thead>
@@ -24,7 +24,7 @@ else
             @foreach (var user in users)
             {
                 <tr>
-                    <td>@user.username</td>
+                    <td>@user.Username</td>
                 </tr>
             }
         </tbody>
@@ -32,11 +32,11 @@ else
 }
 
 @code {
-    private UserView[] users;
+    private UserViewModel[] users;
 
     protected override async Task OnInitializedAsync()
     {
-        users = await Http.GetFromJsonAsync<UserView[]>("Users");
+        users = await Http.GetFromJsonAsync<UserViewModel[]>("Users");
         Console.WriteLine(users);
     }
 

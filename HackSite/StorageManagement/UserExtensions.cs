@@ -13,7 +13,6 @@ namespace StorageProviders
             return new User
             {
                 Username = userEntity.Username,
-                StroageAddress = userEntity.BlobKey
             };
         }
     }

@@ -32,8 +32,11 @@ namespace HackSite.Server
             if (Configuration.GetValue<bool>("UseLocalStorage"))
             {
                 services.AddSingleton<ITableStorageProvider<User>, UserTableStorageMock>();
-                services.AddSingleton<IUserRepository, UserRepository>();
+                services.AddSingleton<ITableStorageProvider<Team>, TeamTableStroageMock>();
             }
+
+            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<ITeamRepository, TeamRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

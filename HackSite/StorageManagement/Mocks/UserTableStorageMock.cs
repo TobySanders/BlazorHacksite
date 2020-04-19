@@ -19,11 +19,21 @@ namespace StorageProviders.Mocks
             {
                new User
                {
-                   Username = "Test User 1",
+                   Id = 0,
+                   Username = "Test User 0",
+                   TeamIds = new List<int>
+                   {
+                       0
+                   }
                },
                new User
                {
-                   Username = "Test User 2"
+                   Id = 1,
+                   Username = "Test User 1",
+                   TeamIds = new List<int>
+                   {
+                       0
+                   }
                }
             };
         }
@@ -34,6 +44,7 @@ namespace StorageProviders.Mocks
 
             if (user == null)
             {
+                model.Id = _users.Count;
                 _users.Add(model);
             }
             else

@@ -1,0 +1,46 @@
+@page "/teamControls"
+@using HackSite.Shared
+@inject HttpClient Http
+
+<h1>Teams</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (teams == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Members</th>
+                <th>Project Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var team in teams)
+            {
+            <tr>
+                <td>@team.Id</td>
+                <td>@team.Name</td>
+                <td>@team.Members.ToString()</td>
+                <td>@team.Project.Title</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private TeamViewModel[] teams;
+
+    protected override async Task OnInitializedAsync()
+    {
+        teams = await Http.GetFromJsonAsync<TeamViewModel[]>("teams");
+    }
+
+}
