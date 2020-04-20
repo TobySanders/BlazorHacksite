@@ -1,0 +1,45 @@
+﻿@page "/Teams"
+
+@using HackSite.Controllers
+@using HackSite.ViewModels
+@inject TeamsController TeamsController
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (teamsView == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Project Title</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var team in teamsView.Teams)
+            {
+                <tr>
+                    <td>@team.Id</td>
+                    <td>@team.Name</td>
+                    <td>@team.project.Title</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private GetTeamsView teamsView;
+
+    protected override async Task OnInitializedAsync()
+    {
+        teamsView = await TeamsController.GetTeamsAsync();
+    }
+}
