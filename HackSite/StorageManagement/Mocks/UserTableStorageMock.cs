@@ -20,7 +20,7 @@ namespace StorageProviders.Mocks
                new User
                {
                    Id = 0,
-                   Username = "Test User 0",
+                   Username = "User_0",
                    TeamIds = new List<int>
                    {
                        0
@@ -29,7 +29,7 @@ namespace StorageProviders.Mocks
                new User
                {
                    Id = 1,
-                   Username = "Test User 1",
+                   Username = "User_1",
                    TeamIds = new List<int>
                    {
                        0
