@@ -1,15 +1,17 @@
-﻿using UserManagement.Abstractions.Models;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using Microsoft.Extensions.Options;
 using StorageProviders.Abstractions;
 using StorageProviders.Abstractions.Models;
+using StorageProviders.Abstractions.Settings;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using UserManagement.Abstractions.Models;
+using StorageProviders.Extensions;
 
 namespace StorageProviders
 {
-    public class UserTableStorageProvider : ITableStorageProvider<User>
+    public class UserTableStorageProvider : ITableStorageProvider<User, string>
     {
         private readonly CloudStorageAccount cloudStorageAccount;
         private readonly CloudTableClient cloudTableClient;

@@ -10,9 +10,9 @@ namespace UserManagement
     public class TeamRepository : ITeamRepository
     {
         private readonly ILogger<TeamRepository> _logger;
-        private readonly ITableStorageProvider<Team> _tableStorageProvider;
+        private readonly ITableStorageProvider<Team, string> _tableStorageProvider;
 
-        public TeamRepository(ILogger<TeamRepository> logger, ITableStorageProvider<Team> tableStorageProvider)
+        public TeamRepository(ILogger<TeamRepository> logger, ITableStorageProvider<Team, string> tableStorageProvider)
         {
             _logger = logger;
             _tableStorageProvider = tableStorageProvider;
