@@ -7,7 +7,7 @@ using UserManagement.Abstractions.Models;
 
 namespace StorageProviders.Mocks
 {
-    public class UserTableStorageMock : ITableStorageProvider<User>
+    public class UserTableStorageMock : ITableStorageProvider<User, string>
     {
         private readonly ILogger<UserTableStorageMock> _logger;
         private readonly List<User> _users;

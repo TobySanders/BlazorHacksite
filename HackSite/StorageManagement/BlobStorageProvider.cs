@@ -1,7 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Microsoft.Extensions.Options;
 using StorageProviders.Abstractions;
-using StorageProviders.Abstractions.Models;
+using StorageProviders.Abstractions.Settings;
 using System;
 using System.Threading.Tasks;
 

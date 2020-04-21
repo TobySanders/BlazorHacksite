@@ -8,9 +8,9 @@ namespace UserManagement
 {
     public class UserRepository : IUserRepository
     {
-        private readonly ITableStorageProvider<User> _tableStorageProvider;
+        private readonly ITableStorageProvider<User, string> _tableStorageProvider;
 
-        public UserRepository(ITableStorageProvider<User> tableStorageProvider)
+        public UserRepository(ITableStorageProvider<User, string> tableStorageProvider)
         {
             _tableStorageProvider = tableStorageProvider;
         }
