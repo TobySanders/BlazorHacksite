@@ -1,0 +1,229 @@
+﻿@page "/NewProject"
+@using HackSite.Pages.Shared
+
+@inject IJSRuntime JSRuntime
+
+
+@code   {
+    ushort? CurrentStep = null; //Temporary solution
+    bool executionFailed = false;
+    bool hasValidationError = false;
+
+
+    private readonly Dictionary<string, object> ComponentAttributes = new Dictionary<string, object>();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeAsync<object>("InitCopy");
+    }
+}
+
+
+@if (CurrentStep == null)
+{
+    <h1>Create Project</h1>
+
+    <p>To create a new project, fill in the details below. Once the project is created, you'll be given a unique link to share with your team members so they can join.</p>
+
+    if (executionFailed)
+    {
+        <PageMessage MessageAlertType="PageMessage.AlertType.Danger"
+                     Header="Something went wrong!"
+                     BodyBefore="Looks like something went wrong on our end. This issue is reported to the relevant team automatically and it will be fixed as soon as possible. Sorry for the inconvenience!" />
+    }
+
+    @*if (hasValidationError)
+        {
+            <PageMessage MessageAlertType="PageMessage.AlertType.Warning"
+                         Header="Missing Info"
+                         BodyBefore="Looks like you submitted an incorrect information. Please check your project details and try submitting again."
+                         BodyAfter="Not sure? You can find more information on the documentation page." />
+        }*@
+
+
+
+    <div class="row">
+
+        <div class="col-12">
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputProjectName">Project Name</label>
+                    <input type="text"
+                           class="form-control @_titleValid"
+                           id="inputProjectName"
+                           placeholder="Name / title of your project"
+                           @attributes="ComponentAttributes"
+                           @onchange="@((ChangeEventArgs __e) => ProjectName = __e.Value.ToString())">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="projectCategorySelect">Category</label>
+                    <select class="form-control @_categoryValid" id="projectCategorySelect"
+                            @attributes="ComponentAttributes"
+                            @onchange="@((ChangeEventArgs __e) => Category = __e.Value.ToString())">
+                        <option value="-1">Select one...</option>
+                        <option value="1">Blah</option>
+                        <option value="2">Blah</option>
+                        <option value="3">Blah</option>
+                        <option value="4">Blah</option>
+                        @* to be populated from categories view with (Select:-1) being static*@
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputProjectDescription">Description</label>
+                <textarea class="form-control @_descriptionValid"
+                          id="inputProjectDescription"
+                          rows="3"
+                          placeholder="Describe with a few words. You can edit this field any time."
+                          @attributes="ComponentAttributes"
+                          @onchange="@((ChangeEventArgs __e) => Description = __e.Value.ToString())"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="inputAddress">Project Repository <sup>(optional)</sup></label>
+                <input type="text"
+                       class="form-control"
+                       id="inputAddress"
+                       placeholder="https://"
+                       @attributes="ComponentAttributes"
+                       @onchange="@((ChangeEventArgs __e) => RepositoryUrl = __e.Value.ToString())">
+            </div>
+            <div class="row">
+                <div class="col-12 text-right">
+                    <button class="btn btn-primary"
+                            @onclick="async () => await CreateProject()"
+                            @attributes="ComponentAttributes">
+                        Create Project
+                    </button>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-12 text-right">
+                    <button class="btn btn-danger"
+                            @onclick="() => SimulateException()">
+                        Simulate Exception
+                    </button>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+}
+else if (CurrentStep == 1)
+{
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="selectorContainer mb-3">
+                <h1 class="display-4 setupHeader">
+                    <i class="fas fa-check-circle text-success" /> Nice One
+                </h1>
+                <p class="lead text-left">
+                    Your project @ProjectName has been created successfully. You can send the link below to your teammates so they can join this project too!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6 text-center">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" value="http://hack/join/8asS_wXi420" readonly>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="js-copyjoincode"><i class="fas fa-copy" /></button>
+                </div>
+            </div>
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+}
+
+
+@code {
+
+
+
+    private async Task CreateProject()
+    {
+        ComponentAttributes.Add("disabled", "disabled");
+
+        if (!HasValidationErrors())
+        {
+            try
+            {
+                //then invoke the action
+                await Task.Delay(1000); //fake action
+                CurrentStep = 1;
+            }
+            catch
+            {
+                CurrentStep = 2;
+            }
+        }
+
+        ComponentAttributes.Remove("disabled");
+    }
+
+    private bool HasValidationErrors()
+    {
+        hasValidationError = false;
+        if (string.IsNullOrWhiteSpace(ProjectName))
+        {
+            _titleValid = "is-invalid";
+            hasValidationError = true;
+        }
+        else
+        {
+            _titleValid = "is-valid";
+        }
+
+        if (string.IsNullOrWhiteSpace(Category) || Category == "-1")
+        {
+            _categoryValid = "is-invalid";
+            hasValidationError = true;
+        }
+        else
+        {
+            _categoryValid = "is-valid";
+        }
+
+        if (string.IsNullOrWhiteSpace(Description))
+        {
+            _descriptionValid = "is-invalid";
+            hasValidationError = true;
+        }
+        else
+        {
+            _descriptionValid = "is-valid";
+        }
+
+        return hasValidationError;
+    }
+
+    public string ProjectName { get; set; }
+    public string Category { get; set; }
+    public string Description { get; set; }
+    public string RepositoryUrl { get; set; }
+
+    private string _titleValid = "";
+    private string _categoryValid = "";
+    private string _descriptionValid = "";
+
+
+
+
+    /////////////////DEMO METHODS
+
+    private void SimulateException()
+    {
+        executionFailed = true;
+    }
+}

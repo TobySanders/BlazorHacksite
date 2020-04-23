@@ -1,4 +1,4 @@
-@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('fontawesome/css/all.min.css');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -180,4 +180,18 @@ app {
         /* Never collapse the sidebar for wide screens */
         display: block;
     }
+}
+
+
+
+/*Custom styling and controls*/
+label > sup { /*Make this class specific rather than just label SSB*/
+    color: rgb(182, 182, 182);
+}
+
+.selectorContainer {
+    margin: 0 auto;
+    padding: 50px 0 0;
+    max-width: 960px;
+    width: 100%;
 }
