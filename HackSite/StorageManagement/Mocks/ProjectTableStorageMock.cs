@@ -18,7 +18,7 @@ namespace StorageProviders.Mocks
             {
                 new Project
                 {
-                        Id = Guid.NewGuid(),
+                        Id = Guid.Parse("891f1907-dbfc-461e-a67f-b52755da2251"),
                         Title = "A Test Project",
                         Description = "Making the world a better place",
                         GithubUrl = "http://notarealurl.com"

@@ -11,6 +11,12 @@ namespace StorageProviders.Abstractions.Models
         public string Description { get; set; }
         public string GithubUrl { get; set; }
 
+        //Needed for queries
+        public ProjectTableEntity()
+        {
+
+        }
+
         public ProjectTableEntity(Project project)
         {
             Id = project.Id == Guid.Empty ? Guid.NewGuid() : project.Id;

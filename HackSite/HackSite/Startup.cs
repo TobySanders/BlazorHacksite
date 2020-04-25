@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StorageProviders;
 using StorageProviders.Abstractions;
+using StorageProviders.Abstractions.Models;
 using StorageProviders.Abstractions.Settings;
 using StorageProviders.Mocks;
 using System;
@@ -35,13 +36,14 @@ namespace HackSite
             if (Configuration.GetValue<bool>("UseLocalStorage"))
             {
                 services.AddSingleton<ITableStorageProvider<User, string>, UserTableStorageMock>().
-                    AddSingleton<ITableStorageProvider<Team, string>, TeamTableStroageMock>().
+                    AddSingleton<ITableStorageProvider<TeamTableEntity, Guid>, TeamTableStroageMock>().
                     AddSingleton<ITableStorageProvider<Project, Guid>, ProjectTableStorageMock>();
             }
             else
             {
                 services.Configure<TableSettings>(Configuration);
-                services.AddSingleton<ITableStorageProvider<Project, Guid>, ProjectTableStorageProvider>();
+                services.AddSingleton<ITableStorageProvider<Project, Guid>, ProjectTableStorageProvider>()
+                   .AddSingleton<ITableStorageProvider<TeamTableEntity, Guid>, TeamTableStorageProvider>();
             }
 
             services.AddSingleton<IUserRepository, UserRepository>()

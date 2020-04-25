@@ -11,7 +11,6 @@ namespace HackSite.Mappers
             {
                 Id = team.Id,
                 Name = team.Name,
-                project = team.project.Map()
             };
         }
 

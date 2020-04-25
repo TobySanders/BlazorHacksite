@@ -8,6 +8,7 @@ using StorageProviders.Abstractions.Settings;
 using StorageProviders.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UserManagement.Abstractions.Models;
 
@@ -56,7 +57,21 @@ namespace StorageProviders
 
         public async Task<List<Project>> ReadAllAsync()
         {
-            throw new NotImplementedException();
+            await _projectsTable.CreateIfNotExistsAsync();
+
+            var tableQuery = new TableQuery<ProjectTableEntity>();
+            var token = new TableContinuationToken();
+            var entities = new List<ProjectTableEntity>();
+
+            do
+            {
+                var queryResult = await _projectsTable.ExecuteQuerySegmentedAsync(tableQuery, token);
+                entities.AddRange(queryResult);
+                token = queryResult.ContinuationToken;
+
+            } while (token != null);
+
+            return entities.Select(projectTableEntity => projectTableEntity.ToInternalModel()).ToList();
         }
 
         public async Task<Project> UpdateAsync(Project Project)
