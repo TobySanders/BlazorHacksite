@@ -9,6 +9,7 @@ namespace UserManagement.Abstractions.Models
         public string Description { get; set; }
         public string RepositoryUrl { get; set; }
         public string ProjectImage { get; set; } //base64
-        public string ProjectShortCode { get; set; } //For sharing
+        public string ShortCode { get; set; } //For sharing
+        public bool IsActive { get; set; }
     }
 }

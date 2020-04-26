@@ -12,6 +12,7 @@ namespace StorageProviders.Abstractions.Models
         public string RepositoryUrl { get; set; }
         public string ProjectImage { get; set; }
         public string ShortCode { get; set; }
+        public bool IsActive { get; set; }
 
 
         public ProjectTableEntity(Project project)
@@ -21,7 +22,8 @@ namespace StorageProviders.Abstractions.Models
             Description = project.Description;
             RepositoryUrl = project.RepositoryUrl;
             ProjectImage = project.ProjectImage;
-            ShortCode = project.ProjectShortCode;
+            ShortCode = project.ShortCode;
+            IsActive = project.IsActive;
 
             PartitionKey = "0"; //going to use static partitioning to reduce complexity given the scale
             RowKey = Id.ToString();

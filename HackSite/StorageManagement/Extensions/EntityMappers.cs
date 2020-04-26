@@ -27,7 +27,8 @@ namespace StorageProviders.Extensions
                 Description = entity.Description,
                 RepositoryUrl = entity.RepositoryUrl,
                 ProjectImage = entity.ProjectImage,
-                ProjectShortCode = entity.ShortCode
+                ShortCode = entity.ShortCode,
+                IsActive = entity.IsActive
             };
         }
 

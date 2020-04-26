@@ -23,7 +23,8 @@ namespace StorageProviders.Mocks
                         Description = "Making the world a better place",
                         RepositoryUrl = "http://notarealurl.com",
                         ProjectImage = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg==",
-                        ProjectShortCode = "uX69_iGv420"
+                        ShortCode = "uX69_iGv420",
+                        IsActive = true
                 }
             };
         }
