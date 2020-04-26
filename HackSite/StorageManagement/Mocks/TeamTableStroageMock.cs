@@ -25,7 +25,9 @@ namespace StorageProviders.Mocks
                         Id = Guid.NewGuid(),
                         Title = "A Test Project",
                         Description = "Making the world a better place",
-                        GithubUrl = "http://notarealurl.com"
+                        RepositoryUrl = "http://notarealurl.com",
+                        ProjectImage = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg==",
+                        ProjectShortCode = "uX69_iGv420"
                     }
                 }
             };

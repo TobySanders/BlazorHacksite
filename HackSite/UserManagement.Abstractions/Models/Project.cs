@@ -7,6 +7,8 @@ namespace UserManagement.Abstractions.Models
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string GithubUrl { get; set; }
+        public string RepositoryUrl { get; set; }
+        public string ProjectImage { get; set; } //base64
+        public string ProjectShortCode { get; set; } //For sharing
     }
 }

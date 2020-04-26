@@ -25,7 +25,9 @@ namespace StorageProviders.Extensions
                 Id = entity.Id,
                 Title = entity.Title,
                 Description = entity.Description,
-                GithubUrl = entity.GithubUrl
+                RepositoryUrl = entity.RepositoryUrl,
+                ProjectImage = entity.ProjectImage,
+                ProjectShortCode = entity.ShortCode
             };
         }
 
