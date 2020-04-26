@@ -35,20 +35,19 @@ namespace HackSite
 
             if (Configuration.GetValue<bool>("UseLocalStorage"))
             {
-                services.AddSingleton<ITableStorageProvider<User, string>, UserTableStorageMock>().
+                services.AddSingleton<ITableStorageProvider<UserTableEntity, Guid>, UserTableStorageMock>().
                     AddSingleton<ITableStorageProvider<TeamTableEntity, Guid>, TeamTableStroageMock>().
-                    AddSingleton<ITableStorageProvider<Project, Guid>, ProjectTableStorageMock>();
+                    AddSingleton<ITableStorageProvider<ProjectTableEntity, Guid>, ProjectTableStorageMock>();
             }
             else
             {
                 services.Configure<TableSettings>(Configuration);
-                services.AddSingleton<ITableStorageProvider<Project, Guid>, ProjectTableStorageProvider>()
+                services.AddSingleton<ITableStorageProvider<ProjectTableEntity, Guid>, ProjectTableStorageProvider>()
                    .AddSingleton<ITableStorageProvider<TeamTableEntity, Guid>, TeamTableStorageProvider>();
             }
 
-            services.AddSingleton<IUserRepository, UserRepository>()
-                .AddSingleton<ITeamRepository, TeamRepository>()
-                .AddSingleton<IProjectsRepository, ProjectsRepository>();
+            services.AddProjectsRepository()
+                .AddTeamsRepository();
 
             services.AddSingleton<TeamsController>(); //no idea if this should be singleton or not but the visual studio template used singleton
         }

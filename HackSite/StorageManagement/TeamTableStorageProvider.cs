@@ -91,7 +91,5 @@ namespace StorageProviders
             var deleteOperation = TableOperation.Delete(tableEntity);
             await _teamsTable.ExecuteAsync(deleteOperation);
         }
-
-
     }
 }

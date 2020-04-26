@@ -9,10 +9,10 @@ namespace HackSite.Controllers
 {
     public class TeamsController
     {
-        private readonly ITeamRepository _teamRepository;
+        private readonly ITeamsRepository _teamRepository;
         private readonly ILogger<TeamsController> _logger;
 
-        public TeamsController(ITeamRepository teamRepository, ILogger<TeamsController> logger)
+        public TeamsController(ITeamsRepository teamRepository, ILogger<TeamsController> logger)
         {
             _teamRepository = teamRepository;
             _logger = logger;
@@ -20,7 +20,7 @@ namespace HackSite.Controllers
 
         public async Task<GetTeamsView> GetTeamsAsync()
         {
-            var result = await _teamRepository.GetTeamsAsync();
+            var result = await _teamRepository.ReadAllAsync();
 
             return new GetTeamsView
             {

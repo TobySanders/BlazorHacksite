@@ -1,39 +1,20 @@
 ﻿using StorageProviders.Abstractions;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using StorageProviders.Abstractions.Models;
+using System;
 using UserManagement.Abstractions;
 using UserManagement.Abstractions.Models;
 
 namespace UserManagement
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : Repository<User, UserTableEntity, Guid>, IUsersRepository
     {
-        private readonly ITableStorageProvider<User, string> _tableStorageProvider;
+        private readonly ITableStorageProvider<UserTableEntity, Guid> _tableStorageProvider;
+        private readonly IEntityResolver<UserTableEntity, User> _entityResolver;
 
-        public UserRepository(ITableStorageProvider<User, string> tableStorageProvider)
+        public UserRepository(ITableStorageProvider<UserTableEntity, Guid> tableStorageProvider, IEntityResolver<UserTableEntity, User> entityResolver)
+            : base(tableStorageProvider, entityResolver)
         {
             _tableStorageProvider = tableStorageProvider;
-        }
-
-        public async Task<User> CreateUserAsync(string username)
-        {
-
-            var user = new User
-            {
-                Username = username,
-            };
-
-            return await _tableStorageProvider.CreateAsync(user);
-        }
-
-        public async Task<User> GetUserAsync(string username)
-        {
-            return await _tableStorageProvider.ReadAsync(username);
-        }
-
-        public async Task<List<User>> GetUsersAsync()
-        {
-            return await _tableStorageProvider.ReadAllAsync();
         }
     }
 }

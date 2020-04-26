@@ -9,7 +9,7 @@ namespace StorageProviders.Abstractions.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public List<string> MemberNames { get; set; }
+        public List<Guid> MemberIds { get; set; }
         public List<Guid> ProjectIds { get; set; }
 
         #region constructors
@@ -45,31 +45,11 @@ namespace StorageProviders.Abstractions.Models
             RowKey = Id.ToString();
         }
 
-        public TeamTableEntity(Team team, List<string> memberNames)
+        public TeamTableEntity(Team team, List<Guid> memberIds, List<Guid> projectIds)
         {
             Id = team.Id;
             Name = team.Name;
-            MemberNames = memberNames;
-
-            PartitionKey = "0"; //going to use static partitioning to reduce complexity given the scale
-            RowKey = Id.ToString();
-        }
-
-        public TeamTableEntity(Team team, List<Guid> projectIds)
-        {
-            Id = team.Id;
-            Name = team.Name;
-            ProjectIds = projectIds;
-
-            PartitionKey = "0"; //going to use static partitioning to reduce complexity given the scale
-            RowKey = Id.ToString();
-        }
-
-        public TeamTableEntity(Team team, List<string> memberNames, List<Guid> projectIds)
-        {
-            Id = team.Id;
-            Name = team.Name;
-            MemberNames = memberNames;
+            MemberIds = memberIds;
             ProjectIds = projectIds;
 
             PartitionKey = "0"; //going to use static partitioning to reduce complexity given the scale

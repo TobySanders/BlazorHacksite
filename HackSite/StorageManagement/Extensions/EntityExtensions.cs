@@ -6,12 +6,6 @@ namespace StorageProviders.Extensions
 {
     public static class EntityExtensions
     {
-        public static Project ToProject(this TableResult result)
-        {
-            var tableEntity = result.Result as ProjectTableEntity;
-            return tableEntity.ToInternalModel();
-        }
-
         public static User ToUser(this TableResult result)
         {
             var userEntity = result.Result as UserTableEntity;

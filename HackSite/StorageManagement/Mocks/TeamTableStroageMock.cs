@@ -24,10 +24,10 @@ namespace StorageProviders.Mocks
                     {
                         Guid.Parse("891f1907-dbfc-461e-a67f-b52755da2251")
                     },
-                    MemberNames = new List<string>
+                    MemberIds = new List<Guid>
                     {
-                        "User_0",
-                        "User_1"
+                        Guid.Parse("5d8bce36-4f42-4078-bb16-e4dda6754de1"),
+                        Guid.Parse("5d26f61c-bd79-45ed-a260-de85d9db7d1a")
                     }
                 }
             };

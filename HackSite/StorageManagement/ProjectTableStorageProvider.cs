@@ -5,16 +5,13 @@ using Microsoft.WindowsAzure.Storage.Table;
 using StorageProviders.Abstractions;
 using StorageProviders.Abstractions.Models;
 using StorageProviders.Abstractions.Settings;
-using StorageProviders.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using UserManagement.Abstractions.Models;
 
 namespace StorageProviders
 {
-    public class ProjectTableStorageProvider : ITableStorageProvider<Project,Guid>
+    public class ProjectTableStorageProvider : ITableStorageProvider<ProjectTableEntity, Guid>
     {
         private readonly ILogger<ProjectTableStorageProvider> _logger;
         private readonly TableSettings _tableSettings;
@@ -33,17 +30,17 @@ namespace StorageProviders
             _projectsTable = _cloudTableClient.GetTableReference("Projects");
         }
 
-        public async Task<Project> CreateAsync(Project model)
+        public async Task<ProjectTableEntity> CreateAsync(ProjectTableEntity entity)
         {
             await _projectsTable.CreateIfNotExistsAsync();
-            var tableEntity = new ProjectTableEntity(model);
-            var insertOperation = TableOperation.Insert(tableEntity);
+            var insertOperation = TableOperation.Insert(entity);
             var result = await _projectsTable.ExecuteAsync(insertOperation);
 
-            return result.ToProject();
+            var projectTableEntity = result.Result as ProjectTableEntity;
+            return projectTableEntity;
         }
 
-        public async Task<Project> ReadAsync(Guid Id)
+        public async Task<ProjectTableEntity> ReadAsync(Guid Id)
         {
             await _projectsTable.CreateIfNotExistsAsync();
 
@@ -52,10 +49,11 @@ namespace StorageProviders
             var retrieveOperation = TableOperation.Retrieve<ProjectTableEntity>(tableEntity.PartitionKey, tableEntity.RowKey);
             var result = await _projectsTable.ExecuteAsync(retrieveOperation);
 
-            return result.ToProject();
+            var projectTableEntity = result.Result as ProjectTableEntity;
+            return projectTableEntity;
         }
 
-        public async Task<List<Project>> ReadAllAsync()
+        public async Task<List<ProjectTableEntity>> ReadAllAsync()
         {
             await _projectsTable.CreateIfNotExistsAsync();
 
@@ -71,17 +69,17 @@ namespace StorageProviders
 
             } while (token != null);
 
-            return entities.Select(projectTableEntity => projectTableEntity.ToInternalModel()).ToList();
+            return entities;
         }
 
-        public async Task<Project> UpdateAsync(Project Project)
+        public async Task<ProjectTableEntity> UpdateAsync(ProjectTableEntity entity)
         {
             await _projectsTable.CreateIfNotExistsAsync();
-            var tableEntity = new ProjectTableEntity(Project);
-            var updateOperation = TableOperation.Replace(tableEntity);
+            var updateOperation = TableOperation.Replace(entity);
             var result = await _projectsTable.ExecuteAsync(updateOperation);
 
-            return result.ToProject();
+            var projectTableEntity = result.Result as ProjectTableEntity;
+            return projectTableEntity;
         }
 
         public async Task DeleteAsync(Guid Id)
