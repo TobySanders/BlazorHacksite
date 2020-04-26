@@ -9,13 +9,7 @@
     bool executionFailed = false;
     bool hasValidationError = false;
 
-
     private readonly Dictionary<string, object> ComponentAttributes = new Dictionary<string, object>();
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await JSRuntime.InvokeAsync<object>("InitCopy");
-    }
 }
 
 
@@ -31,16 +25,6 @@
                      Header="Something went wrong!"
                      BodyBefore="Looks like something went wrong on our end. This issue is reported to the relevant team automatically and it will be fixed as soon as possible. Sorry for the inconvenience!" />
     }
-
-    @*if (hasValidationError)
-        {
-            <PageMessage MessageAlertType="PageMessage.AlertType.Warning"
-                         Header="Missing Info"
-                         BodyBefore="Looks like you submitted an incorrect information. Please check your project details and try submitting again."
-                         BodyAfter="Not sure? You can find more information on the documentation page." />
-        }*@
-
-
 
     <div class="row">
 
@@ -99,9 +83,6 @@
                     </button>
                 </div>
             </div>
-
-
-
             <div class="row">
                 <div class="col-12 text-right">
                     <button class="btn btn-danger"
@@ -110,14 +91,14 @@
                     </button>
                 </div>
             </div>
-
-
-
         </div>
     </div>
 }
 else if (CurrentStep == 1)
 {
+    //TODO mock for now, will come from the response of project creation.
+    ProjectShareUrl = "https://site/project/123";
+
     <div class="row">
         <div class="col-12 text-center">
             <div class="selectorContainer mb-3">
@@ -130,27 +111,31 @@ else if (CurrentStep == 1)
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-3"></div>
         <div class="col-6 text-center">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" value="http://hack/join/8asS_wXi420" readonly>
+                <input 
+                       type="text" 
+                       class="form-control" 
+                       id="projectShareUrlInput"
+                       value="@ProjectShareUrl" readonly>
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="js-copyjoincode"><i class="fas fa-copy" /></button>
+                    <button class="btn btn-outline-secondary"
+                            type="button"
+                            id="js-copyjoincode"
+                            @onclick="async() => await CopyProjectUrlToClipboard()" >
+                        <i class="fas fa-copy" />
+                    </button>
                 </div>
             </div>
         </div>
         <div class="col-3"></div>
     </div>
-
 }
 
 
 @code {
-
-
-
     private async Task CreateProject()
     {
         ComponentAttributes.Add("disabled", "disabled");
@@ -170,6 +155,11 @@ else if (CurrentStep == 1)
         }
 
         ComponentAttributes.Remove("disabled");
+    }
+
+    private async Task CopyProjectUrlToClipboard()
+    {
+        await JSRuntime.InvokeAsync<object>("CopyProjectShareUrl");
     }
 
     private bool HasValidationErrors()
@@ -212,6 +202,7 @@ else if (CurrentStep == 1)
     public string Category { get; set; }
     public string Description { get; set; }
     public string RepositoryUrl { get; set; }
+    public string ProjectShareUrl { get; private set; }
 
     private string _titleValid = "";
     private string _categoryValid = "";
