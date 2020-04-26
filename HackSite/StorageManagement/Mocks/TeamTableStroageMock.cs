@@ -7,7 +7,7 @@ using UserManagement.Abstractions.Models;
 
 namespace StorageProviders.Mocks
 {
-    public class TeamTableStroageMock : ITableStorageProvider<Team>
+    public class TeamTableStroageMock : ITableStorageProvider<Team, string>
     {
         private readonly ILogger<TeamTableStroageMock> _logger;
         private readonly List<Team> _teams;
@@ -22,7 +22,7 @@ namespace StorageProviders.Mocks
                     Name = "Test Team 0",
                     project = new Project
                     {
-                        Id = 0,
+                        Id = Guid.NewGuid(),
                         Title = "A Test Project",
                         Description = "Making the world a better place",
                         GithubUrl = "http://notarealurl.com"

@@ -1,4 +1,4 @@
-﻿namespace StorageProviders.Abstractions.Models
+﻿namespace StorageProviders.Abstractions.Settings
 {
     public class FileStorageSettings
     {
