@@ -2,6 +2,8 @@
 using StorageProviders.Abstractions;
 using StorageProviders.Abstractions.Models;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UserManagement.Abstractions;
 using UserManagement.Abstractions.Models;
 
@@ -17,6 +19,16 @@ namespace UserManagement
         {
             _tableStorageProvider = tableStorageProvider;
             _logger = logger;
+        }
+
+        public Task<List<Project>> GetProjectsByTeamAsync(Guid teamId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Project>> GetProjectsByUserAsync(Guid userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

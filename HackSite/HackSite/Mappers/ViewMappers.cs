@@ -20,7 +20,19 @@ namespace HackSite.Mappers
             {
                 Id = project.Id,
                 Title = project.Title,
-                Description = project.Description
+                Description = project.Description,
+                RepositoryUrl = project.RepositoryUrl
+            };
+        }
+        
+        public static Project Map(this ProjectView projectView)
+        {
+            return new Project
+            {
+                Id = projectView.Id,
+                Title = projectView.Title,
+                Description = projectView.Description,
+                RepositoryUrl = projectView.RepositoryUrl
             };
         }
     }

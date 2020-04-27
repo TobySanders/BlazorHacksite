@@ -7,5 +7,7 @@ namespace UserManagement.Abstractions
 {
     public interface IProjectsRepository : IRepository<Project, Guid>
     {
+        Task<List<Project>> GetProjectsByTeamAsync(Guid teamId);
+        Task<List<Project>> GetProjectsByUserAsync(Guid userId);
     }
 }
