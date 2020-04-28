@@ -19,37 +19,37 @@ namespace UserManagement
             _logger = logger;
         }
 
-        public async Task<Project> AddProject(Project project)
+        public async Task<Project> AddProjectAsync(Project project)
         {
             return await _tableStorageProvider.CreateAsync(project);
         }
 
-        public async Task DeleteProject(Guid id)
+        public async Task DeleteProjectAsync(Guid id)
         {
             await _tableStorageProvider.DeleteAsync(id);
         }
 
-        public async Task<List<Project>> GetAllProjects()
+        public async Task<List<Project>> GetAllProjectsAsync()
         {
             return await _tableStorageProvider.ReadAllAsync();
         }
 
-        public async Task<List<Project>> GetAllProjects(Guid teamId)
+        public async Task<List<Project>> GetAllProjectsAsync(Guid teamId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<Project>> GetAllProjects(string username)
+        public async Task<List<Project>> GetAllProjectsAsync(string username)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Project> GetProject(Guid id)
+        public async Task<Project> GetProjectAsync(Guid id)
         {
             return await _tableStorageProvider.ReadAsync(id);
         }
 
-        public async Task<Project> UpdateProject(Project project)
+        public async Task<Project> UpdateProjectAsync(Project project)
         {
             return await _tableStorageProvider.UpdateAsync(project);
         }

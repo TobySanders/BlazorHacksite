@@ -7,19 +7,19 @@ namespace UserManagement.Abstractions
 {
     public interface IProjectsRepository
     {
-        Task<Project> AddProject(Project project);
-        Task<Project> GetProject(Guid id);
-        Task<List<Project>> GetAllProjects();
+        Task<Project> AddProjectAsync(Project project);
+        Task<Project> GetProjectAsync(Guid id);
+        Task<List<Project>> GetAllProjectsAsync();
         /// <summary>
         /// Gets all Projects for a given team
         /// </summary>
         /// <param name="teamId">Id for the team</param>
-        Task<List<Project>> GetAllProjects(Guid teamId);
+        Task<List<Project>> GetAllProjectsAsync(Guid teamId);
         /// <summary>
         /// Gets all projects for a given username
         /// </summary>
-        Task<List<Project>> GetAllProjects(string username);
-        Task<Project> UpdateProject(Project project);
-        Task DeleteProject(Guid id);
+        Task<List<Project>> GetAllProjectsAsync(string username);
+        Task<Project> UpdateProjectAsync(Project project);
+        Task DeleteProjectAsync(Guid id);
     }
 }
