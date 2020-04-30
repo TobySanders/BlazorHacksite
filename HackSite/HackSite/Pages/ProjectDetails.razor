@@ -1,0 +1,57 @@
+﻿@page "/Projects/{guidString}"
+
+@using HackSite.Controllers
+@using HackSite.Data
+@inject ProjectsController projectsController;
+
+<h3>Project Details</h3>
+
+@if (project == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="view-attribute">
+        <div class="view-attribute-name">
+            Title:
+        </div>
+        <div class="view-attribute-value">
+            @project.Title
+        </div>
+    </div>
+    <div class="view-attribute">
+        <div class="view-attribute-name">
+            Description:
+        </div>
+        <div class="view-attribute-value">
+            @project.Description
+        </div>
+    </div>
+    <div class="view-attribute">
+        <div class="view-attribute-name">
+            Repository URL:
+        </div>
+        <div class="view-attribute-value">
+            @project.RepositoryUrl
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public String GuidString { get; set; }
+
+    private Guid projectGuid;
+    private ProjectView project;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Guid.TryParse(GuidString, out projectGuid);
+
+        if (projectGuid != Guid.Empty)
+        {
+            project = await projectsController.GetProjectAsync(projectGuid);
+        }
+    }
+}
