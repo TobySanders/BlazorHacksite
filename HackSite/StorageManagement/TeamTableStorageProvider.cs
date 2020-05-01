@@ -5,7 +5,6 @@ using Microsoft.WindowsAzure.Storage.Table;
 using StorageProviders.Abstractions;
 using StorageProviders.Abstractions.Models;
 using StorageProviders.Abstractions.Settings;
-using StorageProviders.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +36,7 @@ namespace StorageProviders
             var insertOperation = TableOperation.Insert(team);
             var result = await _teamsTable.ExecuteAsync(insertOperation);
 
-            return result.ToTeam();
+            return result.Result as TeamTableEntity;
         }
 
         public async Task<TeamTableEntity> ReadAsync(Guid Id)
@@ -49,7 +48,7 @@ namespace StorageProviders
             var retrieveOperation = TableOperation.Retrieve<TeamTableEntity>(tableEntity.PartitionKey, tableEntity.RowKey);
             var result = await _teamsTable.ExecuteAsync(retrieveOperation);
 
-            return result.ToTeam();
+            return result.Result as TeamTableEntity;
         }
 
         public async Task<List<TeamTableEntity>> ReadAllAsync()
@@ -77,7 +76,7 @@ namespace StorageProviders
             var updateOperation = TableOperation.Replace(team);
             var result = await _teamsTable.ExecuteAsync(updateOperation);
 
-            return result.ToTeam();
+            return result.Result as TeamTableEntity;
         }
 
         public async Task DeleteAsync(Guid Id)

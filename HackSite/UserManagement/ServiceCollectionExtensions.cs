@@ -11,23 +11,24 @@ namespace UserManagement
     {
         public static IServiceCollection AddProjectsRepository(this IServiceCollection services)
         {
-            services.TryAddScoped<IEntityResolver<ProjectTableEntity, Project>, ProjectEntityResolver>();
-            services.TryAddScoped<IProjectsRepository, ProjectsRepository>();
+            services.TryAddSingleton<IEntityResolver<ProjectTableEntity, Project>, ProjectEntityResolver>();
+            services.TryAddSingleton<IProjectsRepository, ProjectsRepository>();
 
             return services;
         }
 
         public static IServiceCollection AddTeamsRepository(this IServiceCollection services)
         {
-            services.TryAddScoped<IEntityResolver<TeamTableEntity, Team>, TeamEntityResolver>();
-            services.TryAddScoped<ITeamsRepository, TeamsRepository>();
+            services.TryAddSingleton<IEntityResolver<TeamTableEntity, Team>, TeamEntityResolver>();
+            services.TryAddSingleton<ITeamsRepository, TeamsRepository>();
 
             return services;
         }
 
         public static IServiceCollection AddUserRepository(this IServiceCollection services)
         {
-            services.TryAddScoped<IEntityResolver<UserTableEntity, User>, UserEntityResolver>();
+            services.TryAddSingleton<IEntityResolver<UserTableEntity, User>, UserEntityResolver>();
+            services.TryAddSingleton<IUsersRepository, UsersRepository>();
 
             return services;
         }

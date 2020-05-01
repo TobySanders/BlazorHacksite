@@ -1,8 +1,8 @@
 ﻿namespace UserManagement.Abstractions.Models
 {
-    public interface IEntityResolver<TTableEntity,TEntity>
+    public interface IEntityResolver<TSourceType,TTargetType>
     {
-        TTableEntity ToTableEntity(TEntity entity);
-        TEntity ToEntity(TTableEntity tableEntity);
+        TSourceType ToSourceType(TTargetType entity);
+        TTargetType ToTargetType(TSourceType tableEntity);
     }
 }

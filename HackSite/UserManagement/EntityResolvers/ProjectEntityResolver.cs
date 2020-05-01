@@ -5,7 +5,7 @@ namespace UserManagement.EntityResolvers
 {
     public class ProjectEntityResolver : IEntityResolver<ProjectTableEntity, Project>
     {
-        public Project ToEntity(ProjectTableEntity tableEntity)
+        public Project ToTargetType(ProjectTableEntity tableEntity)
         {
             return new Project
             {
@@ -16,7 +16,7 @@ namespace UserManagement.EntityResolvers
             };
         }
 
-        public ProjectTableEntity ToTableEntity(Project entity)
+        public ProjectTableEntity ToSourceType(Project entity)
         {
             return new ProjectTableEntity
             {

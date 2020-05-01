@@ -12,17 +12,14 @@ namespace UserManagement
 {
     public class TeamsRepository : Repository<Team, TeamTableEntity, Guid>, ITeamsRepository
     {
-        private readonly ILogger<TeamsRepository> _logger;
         private readonly ITableStorageProvider<TeamTableEntity, Guid> _teamTableStorageProvider;
         private readonly IProjectsRepository _projectsRepository;
         private readonly IUsersRepository _usersRepository;
-        private readonly IEntityResolver<TeamTableEntity, Team> _entityResolver;
 
         public TeamsRepository(ILogger<TeamsRepository> logger, ITableStorageProvider<TeamTableEntity, Guid> teamTableStorageProvider,
             IProjectsRepository projectsRepository, IUsersRepository userRepository, IEntityResolver<TeamTableEntity,Team> entityResolver) 
             : base(teamTableStorageProvider, entityResolver)
         {
-            _logger = logger;
             _teamTableStorageProvider = teamTableStorageProvider;
             _projectsRepository = projectsRepository;
             _usersRepository = userRepository;

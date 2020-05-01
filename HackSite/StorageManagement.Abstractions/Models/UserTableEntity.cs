@@ -1,7 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 using System;
-using System.Collections.Generic;
-using UserManagement.Abstractions.Models;
 
 namespace StorageProviders.Abstractions.Models
 {
@@ -15,17 +13,11 @@ namespace StorageProviders.Abstractions.Models
 
         }
 
-        public UserTableEntity(string username)
+        public UserTableEntity(Guid userId)
         {
-            Username = username;
+            Id = userId;
             PartitionKey = "User";
-            RowKey = Username;
-        }
-        public UserTableEntity(User user)
-        {
-            Username = user.Username;
-            PartitionKey = "User";
-            RowKey = Username;
+            RowKey = Id.ToString();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace UserManagement.EntityResolvers
 {
     public class TeamEntityResolver : IEntityResolver<TeamTableEntity, Team>
     {
-        public Team ToEntity(TeamTableEntity tableEntity)
+        public Team ToTargetType(TeamTableEntity tableEntity)
         {
             return new Team
             {
@@ -19,14 +19,14 @@ namespace UserManagement.EntityResolvers
             };
         }
 
-        public TeamTableEntity ToTableEntity(Team entity)
+        public TeamTableEntity ToSourceType(Team entity)
         {
             return new TeamTableEntity
             {
                 Id = entity.Id,
                 Name = entity.Name,
-                MemberIds = entity.Members.Select(p => p.Id).ToList(),
-                ProjectIds = entity.Members.Select(p => p.Id).ToList()
+                MemberIds = entity.Members?.Select(p => p.Id).ToList() ?? new List<Guid>(),
+                ProjectIds = entity.Projects?.Select(p => p.Id).ToList() ?? new List<Guid>()
             };
         }
     }

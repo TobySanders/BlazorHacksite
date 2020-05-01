@@ -1,4 +1,5 @@
-﻿using HackSite.Data;
+﻿using HackSite.Views;
+using System.Linq;
 using UserManagement.Abstractions.Models;
 
 namespace HackSite.Mappers
@@ -11,6 +12,19 @@ namespace HackSite.Mappers
             {
                 Id = team.Id,
                 Name = team.Name,
+                Projects = team.Projects.Select(proj => proj.Map()).ToList(),
+                Members = team.Members.Select(member => member.Map()).ToList()
+            };
+        }
+
+        public static Team Map(this TeamView teamView)
+        {
+            return new Team
+            {
+                Id = teamView.Id,
+                Name = teamView.Name,
+                Projects = teamView.Projects.Select(proj=>proj.Map()).ToList(),
+                Members = teamView.Members.Select(member => member.Map()).ToList()
             };
         }
 
@@ -24,7 +38,7 @@ namespace HackSite.Mappers
                 RepositoryUrl = project.RepositoryUrl
             };
         }
-        
+
         public static Project Map(this ProjectView projectView)
         {
             return new Project
@@ -33,6 +47,24 @@ namespace HackSite.Mappers
                 Title = projectView.Title,
                 Description = projectView.Description,
                 RepositoryUrl = projectView.RepositoryUrl
+            };
+        }
+
+        public static UserView Map(this User user)
+        {
+            return new UserView
+            {
+                Id = user.Id,
+                Username = user.Username
+            };
+        }
+
+        public static User Map(this UserView userView)
+        {
+            return new User
+            {
+                Id = userView.Id,
+                Username = userView.Username
             };
         }
     }

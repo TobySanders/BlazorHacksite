@@ -47,7 +47,8 @@ namespace HackSite
             }
 
             services.AddProjectsRepository()
-                .AddTeamsRepository();
+                .AddTeamsRepository()
+                .AddUserRepository();
 
             services.AddSingleton<TeamsController>()
                 .AddSingleton<ProjectsController>(); //no idea if this should be singleton or not but the visual studio template used singleton

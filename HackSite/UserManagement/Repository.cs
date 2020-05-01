@@ -21,9 +21,9 @@ namespace UserManagement
 
         public virtual async Task<TEntity> CreateAsync(TEntity entity)
         {
-            var tableEntity = _entityResolver.ToTableEntity(entity);
+            var tableEntity = _entityResolver.ToSourceType(entity);
             var tableResult = await _tableStorageProvider.CreateAsync(tableEntity);
-            return _entityResolver.ToEntity(tableResult);
+            return _entityResolver.ToTargetType(tableResult);
         }
 
         public virtual async Task DeleteAsync(TKey key)
@@ -54,7 +54,7 @@ namespace UserManagement
         public virtual async Task<List<TEntity>> ReadAllAsync(bool descending = false)
         {
             var dataSet = await _tableStorageProvider.ReadAllAsync();
-            var entitySet = dataSet.Select(p => _entityResolver.ToEntity(p)).ToList();
+            var entitySet = dataSet.Select(p => _entityResolver.ToTargetType(p)).ToList();
 
             return OrderByKey(entitySet, descending);
         }
@@ -62,7 +62,7 @@ namespace UserManagement
         public virtual async Task<TEntity> ReadAsync(TKey key)
         {
             var tableResult =  await _tableStorageProvider.ReadAsync(key);
-            return _entityResolver.ToEntity(tableResult);
+            return _entityResolver.ToTargetType(tableResult);
         }
 
         public virtual async Task<List<TEntity>> ReadMultipleAsync(List<TKey> keys, bool descending = false)
@@ -75,9 +75,9 @@ namespace UserManagement
 
         public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            var tableEntity = _entityResolver.ToTableEntity(entity);
+            var tableEntity = _entityResolver.ToSourceType(entity);
             var tableResult = await _tableStorageProvider.UpdateAsync(tableEntity);
-            return _entityResolver.ToEntity(tableResult);
+            return _entityResolver.ToTargetType(tableResult);
         }
 
         protected List<TEntity>OrderByKey(List<TEntity> entities, bool descending)
