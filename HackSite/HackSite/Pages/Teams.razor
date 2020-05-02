@@ -31,7 +31,7 @@ else
                     <td>
                         <a href="Teams/{@team.Id}">@team.Name</a>
                     </td>
-                    <td>@team.Projects.FirstOrDefault()?.Title</td>
+                    <td>@team.Projects.Count()</td>
                     <td>@team.Members.FirstOrDefault()?.Username</td>
                 </tr>
             }
