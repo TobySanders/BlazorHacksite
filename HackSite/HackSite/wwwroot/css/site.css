@@ -181,3 +181,13 @@ app {
         display: block;
     }
 }
+
+.view-attribute {
+    display: flex;
+    flex-direction: row;
+}
+
+.view-attribute-name {
+    font-weight: bold;
+    margin-right: 10px;
+}

@@ -5,7 +5,7 @@
 @inject TeamsController TeamsController
 @inject ProjectsController ProjectsController
 
-<h1>Weather forecast</h1>
+<h1>Teams and Projects</h1>
 
 <p>This component demonstrates fetching data from a service.</p>
 
@@ -15,12 +15,12 @@
 }
 else
 {
+    <h2>Teams</h2>
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
-                <th>Project Title</th>
+                <th>Projects</th>
                 <th>Username</th>
             </tr>
         </thead>
@@ -28,19 +28,20 @@ else
             @foreach (var team in teamViews)
             {
                 <tr>
-                    <td>@team.Id</td>
-                    <td>@team.Name</td>
-                    <td>@team.Projects.FirstOrDefault()?.Title</td>
+                    <td>
+                        <a href="Teams/{@team.Id}">@team.Name</a>
+                    </td>
+                    <td>@team.Projects.Count()</td>
                     <td>@team.Members.FirstOrDefault()?.Username</td>
                 </tr>
             }
         </tbody>
     </table>
 
+    <h2>Projects</h2>
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Title</th>
                 <th>Description</th>
                 <th>RepositoryUrl</th>
@@ -50,8 +51,9 @@ else
             @foreach (var project in projectViews)
             {
                 <tr>
-                    <td>@project.Id</td>
-                    <td>@project.Title</td>
+                    <td>
+                        <a href="/Projects/{@project.Id}">@project.Title</a>
+                    </td>
                     <td>@project.Description</td>
                     <td>@project.RepositoryUrl</td>
                 </tr>
