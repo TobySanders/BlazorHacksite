@@ -1,0 +1,69 @@
+﻿@page "/Teams/{guidString}"
+
+@using HackSite.Controllers;
+@using HackSite.Views;
+@inject ProjectsController projectsController;
+@inject TeamsController teamsController;
+
+<h3>Team Details</h3>
+
+@if (team == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="view-attribute">
+        <div class="view-attribute-name">
+            Name:
+        </div>
+        <div class="view-attribute-value">
+            @team.Name
+        </div>
+    </div>
+    <div class="view-attribute">
+        <div class="view-attribute-name">
+            Members:
+        </div>
+        <div class="view-attribute-list">
+            @foreach(var member in team.Members)
+            {
+                <div class="view-attribute-value">
+                    @member.Username
+                </div>
+            }
+        </div>
+    </div>
+    <div class="view-attribute">
+        <div class="view-attribute-name">
+            Teams:
+        </div>
+        <div class="view-attribute-list">
+            @foreach (var project in team.Projects)
+            {
+                <div class="view-attribute-value">
+                    <a href="Projects/{@project.Id}">@project.Title</a>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public String GuidString { get; set; }
+
+    private Guid teamGuid;
+    private TeamView team;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Guid.TryParse(GuidString, out teamGuid);
+
+        if (teamGuid != Guid.Empty)
+        {
+            var teamTask = teamsController.GetTeamAsync(teamGuid);
+            team = await teamTask;
+        }
+    }
+}

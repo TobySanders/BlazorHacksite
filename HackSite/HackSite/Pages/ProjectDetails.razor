@@ -3,10 +3,11 @@
 @using HackSite.Controllers;
 @using HackSite.Views;
 @inject ProjectsController projectsController;
+@inject TeamsController teamsController;
 
 <h3>Project Details</h3>
 
-@if (project == null)
+@if (project == null || teams == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -36,6 +37,19 @@ else
             @project.RepositoryUrl
         </div>
     </div>
+    <div class="view-attribute">
+        <div class="view-attribute-name">
+            Teams:
+        </div>
+        <div class="view-attribute-list">
+            @foreach (var team in teams)
+            {
+                <div class="view-attribute-value">
+                    <a href="Teams/{@team.Id}">@team.Name</a>
+                </div>
+            }
+        </div>
+    </div>
 }
 
 @code {
@@ -44,6 +58,7 @@ else
 
     private Guid projectGuid;
     private ProjectView project;
+    private TeamView[] teams;
 
     protected override async Task OnInitializedAsync()
     {
@@ -51,7 +66,11 @@ else
 
         if (projectGuid != Guid.Empty)
         {
-            project = await projectsController.GetProjectAsync(projectGuid);
+            var projectTask = projectsController.GetProjectAsync(projectGuid);
+            var teamsTask = teamsController.GetTeamsByProjectAsync(projectGuid);
+
+            project = await projectTask;
+            teams = await teamsTask;
         }
     }
 }
