@@ -1,33 +1,32 @@
 ﻿using Microsoft.Extensions.Logging;
 using StorageProviders.Abstractions;
+using StorageProviders.Abstractions.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UserManagement.Abstractions.Models;
 
 namespace StorageProviders.Mocks
 {
-    public class ProjectTableStorageMock : ITableStorageProvider<Project, Guid>
+    public class ProjectTableStorageMock : ITableStorageProvider<ProjectTableEntity, Guid>
     {
         private readonly ILogger<ProjectTableStorageMock> _logger;
-        private readonly List<Project> _projects;
+        private readonly List<ProjectTableEntity> _projects;
 
         public ProjectTableStorageMock(ILogger<ProjectTableStorageMock> logger)
         {
-            _projects = new List<Project>
+            _projects = new List<ProjectTableEntity>
             {
-                new Project
+                new ProjectTableEntity
                 {
-                        Id = Guid.Parse("ac77d3ae-15d1-4d53-9026-fa91eb203268"),
+                        Id = Guid.Parse("891f1907-dbfc-461e-a67f-b52755da2251"),
                         Title = "A Test Project",
                         Description = "Making the world a better place",
-                        GithubUrl = "http://notarealurl.com"
-
+                        RepositoryUrl = "http://notarealurl.com"
                 }
             };
         }
 
-        public Task<Project> CreateAsync(Project model)
+        public Task<ProjectTableEntity> CreateAsync(ProjectTableEntity model)
         {
             var Project = _projects.Find(p => p.Id == model.Id);
 
@@ -50,17 +49,17 @@ namespace StorageProviders.Mocks
             return Task.CompletedTask;
         }
 
-        public Task<List<Project>> ReadAllAsync()
+        public Task<List<ProjectTableEntity>> ReadAllAsync()
         {
             return Task.FromResult(_projects);
         }
 
-        public Task<Project> ReadAsync(Guid key)
+        public Task<ProjectTableEntity> ReadAsync(Guid key)
         {
             return Task.FromResult(_projects.Find(p => p.Id == key));
         }
 
-        public Task<Project> UpdateAsync(Project model)
+        public Task<ProjectTableEntity> UpdateAsync(ProjectTableEntity model)
         {
             var user = _projects.Find(p => p.Id == model.Id);
 

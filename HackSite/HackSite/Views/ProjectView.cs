@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HackSite.Data
+namespace HackSite.Views
 {
     public class ProjectView
     {

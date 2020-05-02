@@ -1,24 +1,23 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
-using UserManagement.Abstractions.Models;
+using System;
 
 namespace StorageProviders.Abstractions.Models
 {
     public class UserTableEntity : TableEntity
     {
+        public Guid Id { get; set; }
         public string Username { get; set; }
-        public string BlobKey { get; set; }
 
-        public UserTableEntity(string username)
+        public UserTableEntity()
         {
-            Username = username;
-            PartitionKey = "User";
-            RowKey = Username;
+
         }
-        public UserTableEntity(User user)
+
+        public UserTableEntity(Guid userId)
         {
-            Username = user.Username;
+            Id = userId;
             PartitionKey = "User";
-            RowKey = Username;
+            RowKey = Id.ToString();
         }
     }
 }

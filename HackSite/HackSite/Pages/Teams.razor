@@ -1,14 +1,15 @@
 ﻿@page "/Teams"
 
 @using HackSite.Controllers
-@using HackSite.ViewModels
+@using HackSite.Views
 @inject TeamsController TeamsController
+@inject ProjectsController ProjectsController
 
 <h1>Weather forecast</h1>
 
 <p>This component demonstrates fetching data from a service.</p>
 
-@if (teamsView == null)
+@if (teamViews == null || projectViews == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -20,26 +21,79 @@ else
                 <th>Id</th>
                 <th>Name</th>
                 <th>Project Title</th>
+                <th>Username</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var team in teamsView.Teams)
+            @foreach (var team in teamViews)
             {
                 <tr>
                     <td>@team.Id</td>
                     <td>@team.Name</td>
-                    <td><a href="/Projects/@team.project.Id">@team.project.Title</a></td>
+                    <td>@team.Projects.FirstOrDefault()?.Title</td>
+                    <td>@team.Members.FirstOrDefault()?.Username</td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>RepositoryUrl</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in projectViews)
+            {
+                <tr>
+                    <td>@project.Id</td>
+                    <td>@project.Title</td>
+                    <td>@project.Description</td>
+                    <td>@project.RepositoryUrl</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        <button @onclick="MakeTeam">Make Team!</button>
+        <button @onclick="AddProjectToTeam">Add Project!</button>
+        <button @onclick="Refresh">Refresh!</button>
+    </div>
+
 }
 
 @code {
-    private GetTeamsView teamsView;
+
+    private TeamView[] teamViews;
+    private ProjectView[] projectViews;
 
     protected override async Task OnInitializedAsync()
     {
-        teamsView = await TeamsController.GetTeamsAsync();
+        teamViews = await TeamsController.GetTeamsAsync();
+        projectViews = await ProjectsController.GetProjectsAsync();
+    }
+
+    public async Task MakeTeam()
+    {
+        await TeamsController.AddTeamAsync("Hello World");
+        await Refresh();
+    }
+    public async Task Refresh()
+    {
+        teamViews = await TeamsController.GetTeamsAsync();
+        projectViews = await ProjectsController.GetProjectsAsync();
+    }
+    public async Task AddProjectToTeam()
+    {
+        var subject = teamViews[1];
+        var project = await ProjectsController.GetProjectAsync(Guid.Parse("891f1907-dbfc-461e-a67f-b52755da2251"));
+        subject.Projects.Add(project);
+        await TeamsController.UpdateTeamAsync(subject);
+        await Refresh();
     }
 }
