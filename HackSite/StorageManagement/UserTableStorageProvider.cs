@@ -4,14 +4,13 @@ using Microsoft.WindowsAzure.Storage.Table;
 using StorageProviders.Abstractions;
 using StorageProviders.Abstractions.Models;
 using StorageProviders.Abstractions.Settings;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UserManagement.Abstractions.Models;
-using StorageProviders.Extensions;
 
 namespace StorageProviders
 {
-    public class UserTableStorageProvider : ITableStorageProvider<User, string>
+    public class UserTableStorageProvider : ITableStorageProvider<UserTableEntity, Guid>
     {
         private readonly CloudStorageAccount cloudStorageAccount;
         private readonly CloudTableClient cloudTableClient;
@@ -25,41 +24,39 @@ namespace StorageProviders
             usersTable = cloudTableClient.GetTableReference("Users");
         }
 
-        public async Task<User> CreateAsync(User model)
+        public async Task<UserTableEntity> CreateAsync(UserTableEntity entity)
         {
             await usersTable.CreateIfNotExistsAsync();
-            var tableEntity = new UserTableEntity(model);
-            var insertOperation = TableOperation.Insert(tableEntity);
+            var insertOperation = TableOperation.Insert(entity);
             var result = await usersTable.ExecuteAsync(insertOperation);
 
-            return result.ToUser();
+            return result.Result as UserTableEntity;
         }
 
-        public async Task<User> ReadAsync(string username)
+        public async Task<UserTableEntity> ReadAsync(Guid userId)
         {
             await usersTable.CreateIfNotExistsAsync();
 
-            var tableEntity = new UserTableEntity(username);
+            var tableEntity = new UserTableEntity(userId);
 
             var retrieveOperation = TableOperation.Retrieve<UserTableEntity>(tableEntity.PartitionKey, tableEntity.RowKey);
             var result = await usersTable.ExecuteAsync(retrieveOperation);
 
-            return result.ToUser();
+            return result.Result as UserTableEntity;
         }
 
-        public async Task<User> UpdateAsync(User user)
+        public async Task<UserTableEntity> UpdateAsync(UserTableEntity entity)
         {
             await usersTable.CreateIfNotExistsAsync();
-            var tableEntity = new UserTableEntity(user);
-            var updateOperation = TableOperation.Replace(tableEntity);
+            var updateOperation = TableOperation.Replace(entity);
             var result = await usersTable.ExecuteAsync(updateOperation);
 
-            return result.ToUser();
+            return result.Result as UserTableEntity;
         }
 
-        public async Task DeleteAsync(string username)
+        public async Task DeleteAsync(Guid userId)
         {
-            var tableEntity = new UserTableEntity(username);
+            var tableEntity = new UserTableEntity(userId);
             var retrieveOperation = TableOperation.Retrieve<UserTableEntity>(tableEntity.PartitionKey, tableEntity.RowKey);
             var result = await usersTable.ExecuteAsync(retrieveOperation);
 
@@ -69,7 +66,7 @@ namespace StorageProviders
             await usersTable.ExecuteAsync(deleteOperation);
         }
 
-        public Task<List<User>> ReadAllAsync()
+        public Task<List<UserTableEntity>> ReadAllAsync()
         {
             throw new System.NotImplementedException();
         }

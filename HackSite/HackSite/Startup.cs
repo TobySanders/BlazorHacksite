@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StorageProviders;
 using StorageProviders.Abstractions;
+using StorageProviders.Abstractions.Models;
 using StorageProviders.Abstractions.Settings;
 using StorageProviders.Mocks;
 using System;
@@ -34,19 +35,20 @@ namespace HackSite
 
             if (Configuration.GetValue<bool>("UseLocalStorage"))
             {
-                services.AddSingleton<ITableStorageProvider<User, string>, UserTableStorageMock>().
-                    AddSingleton<ITableStorageProvider<Team, string>, TeamTableStroageMock>().
-                    AddSingleton<ITableStorageProvider<Project, Guid>, ProjectTableStorageMock>();
+                services.AddSingleton<ITableStorageProvider<UserTableEntity, Guid>, UserTableStorageMock>().
+                    AddSingleton<ITableStorageProvider<TeamTableEntity, Guid>, TeamTableStroageMock>().
+                    AddSingleton<ITableStorageProvider<ProjectTableEntity, Guid>, ProjectTableStorageMock>();
             }
             else
             {
                 services.Configure<TableSettings>(Configuration);
-                services.AddSingleton<ITableStorageProvider<Project, Guid>, ProjectTableStorageProvider>();
+                services.AddSingleton<ITableStorageProvider<ProjectTableEntity, Guid>, ProjectTableStorageProvider>()
+                   .AddSingleton<ITableStorageProvider<TeamTableEntity, Guid>, TeamTableStorageProvider>();
             }
 
-            services.AddSingleton<IUserRepository, UserRepository>()
-                .AddSingleton<ITeamRepository, TeamRepository>()
-                .AddSingleton<IProjectsRepository, ProjectsRepository>();
+            services.AddProjectsRepository()
+                .AddTeamsRepository()
+                .AddUserRepository();
 
             services.AddSingleton<TeamsController>()
                 .AddSingleton<ProjectsController>(); //no idea if this should be singleton or not but the visual studio template used singleton
