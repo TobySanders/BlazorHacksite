@@ -1,0 +1,33 @@
+﻿@*@using HackSite.Controllers
+@using HackSite.Views
+@using HackSite.Pages.Components.Collections.Fragments
+
+<div class="card">
+    <h3 class="card-title"></h3>
+    <div class="card-body">
+        <ul class="list-group">
+            @foreach (var projectView in _projectViews)
+            {
+                <UserFragment ProjectView="projectView" OnSelected="OnItemSelected"></UserFragment>
+            }
+        </ul>
+    </div>
+</div>
+
+@code{
+    private ProjectView[] _projectViews;
+    public List<Guid> SelectedProjects = new List<Guid>();
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+
+    private void OnItemSelected(Guid id)
+    {
+        SelectedProjects.Add(id);
+    }
+    private void OnItemDeselcted(Guid id)
+    {
+        SelectedProjects.Remove(id);
+    }
+}*@

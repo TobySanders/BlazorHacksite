@@ -1,0 +1,42 @@
+﻿@using HackSite.Views
+<li class="list-group-item @rowClass" @onclick="OnCheckbox">
+    <div class="row">
+        <div class="col">
+            @ProjectView.Title
+        </div>
+        <div class="col">
+            <a class="card-link" href="/Projects/@ProjectView.Id">View Project</a>
+        </div>
+    </div>
+</li>
+
+@code{
+    [Parameter]
+    public ProjectView ProjectView { get; set; }
+    [Parameter]
+    public EventCallback<Guid> OnSelected { get; set; }
+    [Parameter]
+    public EventCallback<Guid> OnDeselected { get; set; }
+
+    private bool isSelected;
+    private string rowClass = rowClassDeselcted;
+
+    private const string rowClassSelected = "bg-primary";
+    private const string rowClassDeselcted = "bg-secondary";
+
+    public void OnCheckbox()
+    {
+        isSelected = !isSelected;
+
+        rowClass = isSelected ? rowClassSelected : rowClassDeselcted;
+
+        if (isSelected)
+        {
+            OnSelected.InvokeAsync(ProjectView.Id);
+        }
+        else
+        {
+            OnDeselected.InvokeAsync(ProjectView.Id);
+        }
+    }
+}

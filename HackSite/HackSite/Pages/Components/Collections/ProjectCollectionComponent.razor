@@ -1,0 +1,48 @@
+﻿@using HackSite.Controllers
+@using HackSite.Views
+@using HackSite.Pages.Components.Collections.Fragments
+@inject ProjectsController ProjectsController
+
+<div class="card">
+    <div class="card-title">Projects</div>
+    <div class="card-body">
+        @if (_projectViews == null)
+        {
+            <p><em>loading</em></p>
+        }
+        else
+        {
+            <ul class="list-group">
+                @foreach (var projectView in _projectViews)
+                {
+                    <ProjectFragment ProjectView="projectView" OnSelected="OnItemSelected" OnDeselected="OnItemDeselcted"></ProjectFragment>
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+@code{
+    private ProjectView[] _projectViews;
+
+    [Parameter]
+    public List<Guid> SelectedProjects { get; set; }
+    [Parameter]
+    public EventCallback<List<Guid>> SelectedProjectsChanged { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _projectViews = await ProjectsController.GetProjectsAsync();
+    }
+
+    private void OnItemSelected(Guid id)
+    {
+        SelectedProjects.Add(id);
+        SelectedProjectsChanged.InvokeAsync(SelectedProjects);
+    }
+    private void OnItemDeselcted(Guid id)
+    {
+        SelectedProjects.Remove(id);
+        SelectedProjectsChanged.InvokeAsync(SelectedProjects);
+    }
+}

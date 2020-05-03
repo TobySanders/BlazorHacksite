@@ -1,0 +1,48 @@
+﻿@using HackSite.Pages.Components.Templates
+@using HackSite.Controllers
+@using HackSite.Views
+@using HackSite.Pages.Components.Collections
+ 
+@inject TeamsController TeamsController
+
+<div class="card">
+    <div class="card-header">
+        <h2>Create Team</h2>
+    </div>
+    <div class="card-body">
+        <div class="container">
+            <InputRow Description="Name">
+                <InputTemplate><input type="text" placeholder="@TeamView.Name" @bind="@TeamView.Name" style="width:100%" /></InputTemplate>
+            </InputRow>
+            <ProjectCollectionComponent @bind-SelectedProjects="projectIds"></ProjectCollectionComponent>
+            <UserCollectionComponent></UserCollectionComponent>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-primary" @onclick="SubmitOnClick">Submit</a>
+    </div>
+    <p>@Success</p>
+</div>
+
+@code{
+    [Parameter]
+    public TeamView TeamView { get; set; }
+    private string Name { get; set; }
+    private List<Guid> projectIds = new List<Guid>();
+    private string Success = "";
+
+    protected async Task SubmitOnClick()
+    {
+        try
+        {
+            TeamView.Name = Name;
+            await TeamsController.UpdateTeamAsync(TeamView);
+            Success = "Complete!";
+
+        }
+        catch (Exception e)
+        { 
+            Success = "Failed :(";
+        }
+    }
+}

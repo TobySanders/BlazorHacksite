@@ -22,6 +22,20 @@ namespace StorageProviders.Mocks
                         Title = "A Test Project",
                         Description = "Making the world a better place",
                         RepositoryUrl = "http://notarealurl.com"
+                },
+                new ProjectTableEntity
+                {
+                        Id = Guid.Parse("891f1907-dbfc-461e-a67f-b52755da2252"),
+                        Title = "Another Project",
+                        Description = "I Do some things",
+                        RepositoryUrl = "http://notarealurl.com"
+                },
+                new ProjectTableEntity
+                {
+                        Id = Guid.Parse("891f1907-dbfc-461e-a67f-b52755da2253"),
+                        Title = "Yup it's a project",
+                        Description = "Making the world a significantly worse place",
+                        RepositoryUrl = "http://notarealurl.com"
                 }
             };
         }
