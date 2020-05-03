@@ -1,45 +1,68 @@
 ﻿@page "/Teams"
 
 @using HackSite.Controllers
-@using HackSite.ViewModels
-@inject TeamsController TeamsController
+@using HackSite.Views
+@using HackSite.Pages.Components
 
-<h1>Weather forecast</h1>
+@inject TeamsController TeamsController
+@inject ProjectsController ProjectsController
+
+<h1>Teams and Projects</h1>
 
 <p>This component demonstrates fetching data from a service.</p>
 
-@if (teamsView == null)
+@if (teamViews == null || projectViews == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Project Title</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var team in teamsView.Teams)
-            {
-                <tr>
-                    <td>@team.Id</td>
-                    <td>@team.Name</td>
-                    <td>@team.project.Title</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <h2>Teams</h2>
+    <div class="container">
+        @foreach (var team in teamViews)
+        {
+            <div class="row mb-1">
+                <div class="col">
+                    <TeamPreviewComponent TeamView="@team"></TeamPreviewComponent>
+                </div>
+            </div>
+        }
+    </div>
+    <div>
+        <button @onclick="MakeTeam">Make Team!</button>
+        <button @onclick="AddProjectToTeam">Add Project!</button>
+        <button @onclick="Refresh">Refresh!</button>
+    </div>
+
 }
 
 @code {
-    private GetTeamsView teamsView;
+
+    private TeamView[] teamViews;
+    private ProjectView[] projectViews;
 
     protected override async Task OnInitializedAsync()
     {
-        teamsView = await TeamsController.GetTeamsAsync();
+        teamViews = await TeamsController.GetTeamsAsync();
+        projectViews = await ProjectsController.GetProjectsAsync();
+    }
+
+    public async Task MakeTeam()
+    {
+        await TeamsController.AddTeamAsync("Team German Donner");
+        await Refresh();
+    }
+    public async Task Refresh()
+    {
+        teamViews = await TeamsController.GetTeamsAsync();
+        projectViews = await ProjectsController.GetProjectsAsync();
+    }
+    public async Task AddProjectToTeam()
+    {
+        var subject = teamViews[0];
+        var project = await ProjectsController.GetProjectAsync(Guid.Parse("891f1907-dbfc-461e-a67f-b52755da2251"));
+        subject.Projects.Add(project);
+        await TeamsController.UpdateTeamAsync(subject);
+        await Refresh();
     }
 }

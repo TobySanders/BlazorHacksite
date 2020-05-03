@@ -1,50 +1,42 @@
 ﻿using Microsoft.Extensions.Logging;
 using StorageProviders.Abstractions;
+using StorageProviders.Abstractions.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UserManagement.Abstractions.Models;
 
 namespace StorageProviders.Mocks
 {
-    public class UserTableStorageMock : ITableStorageProvider<User, string>
+    public class UserTableStorageMock : ITableStorageProvider<UserTableEntity, Guid>
     {
         private readonly ILogger<UserTableStorageMock> _logger;
-        private readonly List<User> _users;
+        private readonly List<UserTableEntity> _users;
 
         public UserTableStorageMock(ILogger<UserTableStorageMock> logger)
         {
             _logger = logger;
-            _users = new List<User>
+            _users = new List<UserTableEntity>
             {
-               new User
+               new UserTableEntity
                {
-                   Id = 0,
+                   Id = Guid.Parse("5d8bce36-4f42-4078-bb16-e4dda6754de1"),
                    Username = "User_0",
-                   TeamIds = new List<int>
-                   {
-                       0
-                   }
                },
-               new User
+               new UserTableEntity
                {
-                   Id = 1,
-                   Username = "User_1",
-                   TeamIds = new List<int>
-                   {
-                       0
-                   }
+                   Id = Guid.Parse("5d26f61c-bd79-45ed-a260-de85d9db7d1a"),
+                   Username = "User_1"
                }
             };
         }
 
-        public Task<User> CreateAsync(User model)
+        public Task<UserTableEntity> CreateAsync(UserTableEntity model)
         {
             var user = _users.Find(p => p.Username == model.Username);
 
             if (user == null)
             {
-                model.Id = _users.Count;
+                model.Id = Guid.NewGuid();
                 _users.Add(model);
             }
             else
@@ -55,22 +47,22 @@ namespace StorageProviders.Mocks
             return Task.FromResult(model);
         }
 
-        public Task DeleteAsync(string key)
+        public Task DeleteAsync(Guid key)
         {
-            _users.Remove(_users.Find(p => p.Username == key));
+            _users.Remove(_users.Find(p => p.Id == key));
             return Task.CompletedTask;
         }
 
-        public Task<User> ReadAsync(string key)
+        public Task<UserTableEntity> ReadAsync(Guid key)
         {
-            return Task.FromResult(_users.Find(p => p.Username == key));
+            return Task.FromResult(_users.Find(p => p.Id == key));
         }
 
-        public Task<List<User>> ReadAllAsync()
+        public Task<List<UserTableEntity>> ReadAllAsync()
         {
             return Task.FromResult(_users);
         }
-        public Task<User> UpdateAsync(User model)
+        public Task<UserTableEntity> UpdateAsync(UserTableEntity model)
         {
             var user = _users.Find(p => p.Username == model.Username);
             

@@ -182,6 +182,25 @@ app {
     }
 }
 
+.view-attribute {
+    display: flex;
+    flex-direction: row;
+}
+
+.view-attribute-name {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.background-neutral {
+    background: #c7cbd1
+}
+.color-primary {
+    background-color: rgb(5, 39, 103);
+    color: white;
+}
+}
+
 
 
 /*Custom styling and controls*/
