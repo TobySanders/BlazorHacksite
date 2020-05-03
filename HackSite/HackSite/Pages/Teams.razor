@@ -2,6 +2,8 @@
 
 @using HackSite.Controllers
 @using HackSite.Views
+@using HackSite.Pages.Components
+
 @inject TeamsController TeamsController
 @inject ProjectsController ProjectsController
 
@@ -16,51 +18,16 @@
 else
 {
     <h2>Teams</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Projects</th>
-                <th>Username</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var team in teamViews)
-            {
-                <tr>
-                    <td>
-                        <a href="Teams/{@team.Id}">@team.Name</a>
-                    </td>
-                    <td>@team.Projects.Count()</td>
-                    <td>@team.Members.FirstOrDefault()?.Username</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <h2>Projects</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>RepositoryUrl</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var project in projectViews)
-            {
-                <tr>
-                    <td>
-                        <a href="/Projects/{@project.Id}">@project.Title</a>
-                    </td>
-                    <td>@project.Description</td>
-                    <td>@project.RepositoryUrl</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
+    <div class="container">
+        @foreach (var team in teamViews)
+        {
+            <div class="row mb-1">
+                <div class="col">
+                    <TeamPreviewComponent TeamView="@team"></TeamPreviewComponent>
+                </div>
+            </div>
+        }
+    </div>
     <div>
         <button @onclick="MakeTeam">Make Team!</button>
         <button @onclick="AddProjectToTeam">Add Project!</button>
@@ -82,7 +49,7 @@ else
 
     public async Task MakeTeam()
     {
-        await TeamsController.AddTeamAsync("Hello World");
+        await TeamsController.AddTeamAsync("Team German Donner");
         await Refresh();
     }
     public async Task Refresh()
@@ -92,7 +59,7 @@ else
     }
     public async Task AddProjectToTeam()
     {
-        var subject = teamViews[1];
+        var subject = teamViews[0];
         var project = await ProjectsController.GetProjectAsync(Guid.Parse("891f1907-dbfc-461e-a67f-b52755da2251"));
         subject.Projects.Add(project);
         await TeamsController.UpdateTeamAsync(subject);

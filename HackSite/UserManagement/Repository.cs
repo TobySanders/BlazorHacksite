@@ -36,7 +36,7 @@ namespace UserManagement
             var dataSet = await ReadAllAsync();
             var filterSet = dataSet.Where(filter).ToList();
 
-            return OrderByKey(filterSet, descending);
+            return OrderByDefault(filterSet, descending);
         }
 
         public virtual async Task<List<TEntity>> QueryAsync<TSortKey>(Func<TEntity, bool> filter, Func<TEntity, TSortKey> orderBy, bool descending = false)
@@ -56,7 +56,7 @@ namespace UserManagement
             var dataSet = await _tableStorageProvider.ReadAllAsync();
             var entitySet = dataSet.Select(p => _entityResolver.ToTargetType(p)).ToList();
 
-            return OrderByKey(entitySet, descending);
+            return OrderByDefault(entitySet, descending);
         }
 
         public virtual async Task<TEntity> ReadAsync(TKey key)
@@ -70,7 +70,7 @@ namespace UserManagement
             var dataSet = await ReadAllAsync();
             var filterSet = dataSet.Where(p => keys.Contains(p.Key)).ToList();
 
-            return OrderByKey(filterSet, descending);
+            return OrderByDefault(filterSet, descending);
         }
 
         public virtual async Task<TEntity> UpdateAsync(TEntity entity)
@@ -80,7 +80,7 @@ namespace UserManagement
             return _entityResolver.ToTargetType(tableResult);
         }
 
-        protected List<TEntity>OrderByKey(List<TEntity> entities, bool descending)
+        protected virtual List<TEntity>OrderByDefault(List<TEntity> entities, bool descending)
         {
             return (descending ? entities.OrderByDescending(p => p.Key) : entities.OrderBy(p => p.Key)).ToList();
         }

@@ -37,7 +37,7 @@ namespace UserManagement
             var tableResult = await _teamTableStorageProvider.ReadAllAsync();
             var mappedTeams = await MapTeams(tableResult);
 
-            return OrderByKey(mappedTeams, descending);
+            return OrderByDefault(mappedTeams, descending);
         }
 
         public async Task<List<Team>> GetAllTeamsByProjectAsync(Guid key, bool descending = false)
@@ -46,7 +46,7 @@ namespace UserManagement
             var filterResult = tableResult.Where(p => p.ProjectIds.Contains(key)).ToList();
             var mappedTeams = await MapTeams(filterResult);
 
-            return OrderByKey(mappedTeams, descending);
+            return OrderByDefault(mappedTeams, descending);
         }
 
         public async Task<List<Team>> GetAllTeamsByUserAsync(Guid userId, bool descending = false)
@@ -55,7 +55,7 @@ namespace UserManagement
             var filterResult = tableResult.Where(p => p.MemberIds.Contains(userId)).ToList();
             var mappedTeams = await MapTeams(filterResult);
 
-            return OrderByKey(mappedTeams, descending);
+            return OrderByDefault(mappedTeams, descending);
         }
 
         private async Task<Team> MapTeam(TeamTableEntity tableResult)
@@ -78,6 +78,11 @@ namespace UserManagement
                 tasks.Add(MapTeam(tableEntity));
             }
             return (await Task.WhenAll(tasks)).ToList();
+        }
+
+        protected override List<Team> OrderByDefault(List<Team> entities, bool descending)
+        {
+            return entities.OrderBy(p => p.Name).ToList();
         }
     }
 }

@@ -191,3 +191,11 @@ app {
     font-weight: bold;
     margin-right: 10px;
 }
+
+.background-neutral {
+    background: #c7cbd1
+}
+.color-primary {
+    background-color: rgb(5, 39, 103);
+    color: white;
+}

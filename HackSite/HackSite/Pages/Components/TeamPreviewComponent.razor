@@ -1,0 +1,25 @@
+﻿@using HackSite.Views
+<div class="card">
+    <div class="card text-center">
+        <div class="card-body color-primary">
+            <h1 class="card-title">@TeamView?.Name</h1>
+        </div>
+        <div class="card-text container">
+            <div class="row">
+                <div class="col">Members: @TeamView.Members.Count()</div>
+            </div>
+            <div class="row">
+                <div class="col">Projects: @TeamView.Projects.Count()</div>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <a class="card-link" href="/Teams/@TeamView.Id">View Team</a>
+        </div>
+    </div>
+</div>
+
+@code{
+    [Parameter]
+    public TeamView TeamView { get; set; }
+}

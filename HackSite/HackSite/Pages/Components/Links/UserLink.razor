@@ -1,0 +1,18 @@
+﻿@using HackSite.Views
+
+<li class="list-group-item">
+    <div class="row">
+        <div class="col-8 text-left">@UserView.Username</div>
+        <a class="btn btn-primary col">View User</a>
+    </div>
+</li>
+
+@code{
+    [Parameter]
+    public UserView UserView { get; set; }
+
+    public void ViewUserClick()
+    {
+        //Go To Users Page
+    }
+}

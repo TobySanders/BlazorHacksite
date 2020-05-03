@@ -1,0 +1,34 @@
+﻿@using HackSite.Views
+@using HackSite.Pages.Components.Links
+<div class="card">
+    <div class="card text-center">
+        <div class="card-body color-primary">
+            <h1 class="card-title">@TeamView?.Name</h1>
+        </div>
+        <div class="card-header">
+            Members
+        </div>
+        <ul class="list-group list-group-flush">
+            @foreach (var Member in TeamView.Members)
+            {
+                <UserLink UserView="@Member"></UserLink>
+            }
+        </ul>
+        <div class="card-header">
+            Projects
+        </div>
+        <div class="card-deck">
+            @foreach (var Project in TeamView.Projects)
+            {
+
+                <ProjectLink projectView="@Project"></ProjectLink>
+
+            }
+        </div>
+    </div>
+</div>
+
+@code{
+    [Parameter]
+    public TeamView TeamView { get; set; }
+}
