@@ -17,12 +17,13 @@ namespace HackSite.Controllers
             _projectsRepository = projectsRepository;
         }
 
-        public async Task<ProjectView> AddProjectAsync(string title, string description)
+        public async Task<ProjectView> AddProjectAsync(CreateProjectView createProjectView)
         {
             var project = new Project
             {
-                Title = title,
-                Description = description
+                Title = createProjectView.Title,
+                Description = createProjectView.Description,
+                RepositoryUrl = createProjectView.RepositoryUrl
             };
 
             var result = await _projectsRepository.CreateAsync(project);
