@@ -1,0 +1,155 @@
+﻿@using HackSite.Views
+@using HackSite.Controllers
+
+@inject ProjectsController ProjectsController
+
+@if (_isLoading)
+{
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="selectorContainer mb-3">
+                        <p class="spinner-border text-primary">Just finishing up...</p>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+
+        <div class="col-12">
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputProjectName">Project Name</label>
+                    <input type="text"
+                           class="form-control @_titleValid"
+                           id="inputProjectName"
+                           placeholder="Name / title of your project"
+                           @attributes="ComponentAttributes"
+                           @onchange="@((ChangeEventArgs __e) => _createProjectView.Title = __e.Value.ToString())">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="projectCategorySelect">Category</label>
+                    <select class="form-control @_categoryValid" id="projectCategorySelect"
+                            @attributes="ComponentAttributes"
+                            @onchange="@((ChangeEventArgs __e) => _ = __e.Value.ToString())">
+                        @*discarded for now*@
+                        <option value="-1">Select one...</option>
+                        <option value="1">Blah</option>
+                        <option value="2">Blah</option>
+                        <option value="3">Blah</option>
+                        <option value="4">Blah</option>
+                        @* to be populated from categories view with (Select:-1) being static*@
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputProjectDescription">Description</label>
+                <textarea class="form-control @_descriptionValid"
+                          id="inputProjectDescription"
+                          rows="3"
+                          placeholder="Describe with a few words. You can edit this field any time."
+                          @attributes="ComponentAttributes"
+                          @onchange="@((ChangeEventArgs __e) => _createProjectView.Description = __e.Value.ToString())"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="inputAddress">Project Repository <sup>(optional)</sup></label>
+                <input type="text"
+                       class="form-control"
+                       id="inputAddress"
+                       placeholder="https://"
+                       @attributes="ComponentAttributes"
+                       @onchange="@((ChangeEventArgs __e) => _createProjectView.RepositoryUrl = __e.Value.ToString())">
+            </div>
+            <div class="row">
+                <div class="col-12 text-right">
+                    <button class="btn btn-primary"
+                            @onclick="async () => await CreateProject()"
+                            @attributes="ComponentAttributes">
+                        Create Project
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code{
+    [Parameter]
+    public EventCallback<ProjectView> OnProjectCreated { get; set; }
+    [Parameter]
+    public EventCallback<Exception> OnExecutionFailed { get; set; }
+
+    private string _titleValid = "";
+    private string _categoryValid = "";
+    private string _descriptionValid = "";
+    private bool _hasValidationError = false;
+    private bool _isLoading = false;
+    private CreateProjectView _createProjectView = new CreateProjectView();
+
+    private readonly Dictionary<string, object> ComponentAttributes = new Dictionary<string, object>();
+
+    private async Task CreateProject()
+    {
+        ComponentAttributes.Add("disabled", "disabled");
+
+        if (!HasValidationErrors())
+        {
+            _isLoading = true;
+
+            try
+            {
+                var result = await ProjectsController.AddProjectAsync(_createProjectView);
+
+                await Task.Delay(5000);
+
+                _ = OnProjectCreated.InvokeAsync(result); //no need to wait on the callback
+            }
+            catch (Exception e)
+            {
+                await OnExecutionFailed.InvokeAsync(e);
+            }
+        }
+
+        ComponentAttributes.Remove("disabled");
+    }
+
+    private bool HasValidationErrors()
+    {
+        _hasValidationError = false;
+        if (string.IsNullOrWhiteSpace(_createProjectView.Title))
+        {
+            _titleValid = "is-invalid";
+            _hasValidationError = true;
+        }
+        else
+        {
+            _titleValid = "is-valid";
+        }
+
+        //if (string.IsNullOrWhiteSpace(Category) || Category == "-1")
+        //{
+        //    _categoryValid = "is-invalid";
+        //    hasValidationError = true;
+        //}
+        //else
+        //{
+        //    _categoryValid = "is-valid";
+        //}
+
+        if (string.IsNullOrWhiteSpace(_createProjectView.Description))
+        {
+            _descriptionValid = "is-invalid";
+            _hasValidationError = true;
+        }
+        else
+        {
+            _descriptionValid = "is-valid";
+        }
+
+        return _hasValidationError;
+    }
+}
