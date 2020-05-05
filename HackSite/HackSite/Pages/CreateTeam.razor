@@ -1,84 +1,182 @@
 ﻿@page "/Teams/Create"
-@using HackSite.Controllers 
+@using HackSite.Controllers
 @using HackSite.Pages.Components
 @using HackSite.Pages.Components.Collections
 @using HackSite.Views
+@using HackSite.Pages.Shared
 
 @inject TeamsController TeamsController
 @inject NavigationManager NavMan
-<div class="container">
-    <div class="row mb-5">
-        <p>Step: @_currentStage of @_totalStages</p>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            @switch (_currentStage)
-            {
-                case 0:
-                    <div class="row mb-1">
-                        <h3>Okay, Let's name your team!</h3>
-                    </div>
-                    <div class="row mb-1">
-                        <CreateTeamComponent TeamName="@_createTeamView.Name"></CreateTeamComponent>
-                    </div>
-                    break;
-                case 1:
-                    <div class="row mb-1">
-                        <h3>Now Lets add some Members, You can skip this for now if you'd like!</h3>
-                    </div>
-                    <div class="row mb-1">
-                        @*<UserCollectionComponent @bind-SelectedUsers="_createTeamView.MemberIds"></UserCollectionComponent>*@
-                    </div>
-                    break;
-                case 2:
-                    <div class="row mb-1">
-                        <h3>Now Lets select some projects, You can skip this for now if you'd like!</h3>
-                    </div>
-                    <div class="row mb-1">
-                        <ProjectCollectionComponent @bind-SelectedProjects="_createTeamView.ProjectIds"></ProjectCollectionComponent>
-                    </div>
-                    break;
-            }
+
+@if (_executionFailed)
+{
+    <PageMessage MessageAlertType="PageMessage.AlertType.Danger"
+                 Header="Something went wrong!"
+                 BodyBefore="Looks like something went wrong on our end. This issue is reported to the relevant team automatically and it will be fixed as soon as possible. Sorry for the inconvenience!" />
+}else if (_loading)
+{
+    <div class="container">
+        <div class="row mb-3 justify-content-center">
+            <h2 class="text-primary">Just finishing up...</h2>
+        </div>
+        <div class="row justify-content-center">
+        <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+            <span class="sr-only">Just finishing up...</span>
+        </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-4  align-self-start">
-            <button class="btn btn-primary" style="@GetButtonStyle(_currentStage==0)" @onclick="OnBackClicked">Back</button>
-        </div>
-        <div class="col-4  align-self-end">
-            <button class="btn btn-primary" style="@GetButtonStyle(!(_currentStage==_totalStages))" @onclick="OnNextClicked">Next</button>
-        </div>
-        <div class="col-4  align-self-end">
-            <button class="btn btn-primary" style="@GetButtonStyle(_currentStage==_totalStages)" @onclick="OnSubmitClicked">Submit!</button>
+}
+else
+{
+    @*<div class="container-fluid justify-content-center">
+            <div class="row mb-5">
+                <h1>Step: @_currentStage of @_totalStages</h1>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: @(_currentStage * (100 / _totalStages))%" aria-valuenow="@(_currentStage * (100 / _totalStages))" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    @switch (_currentStage)
+                    {
+                        case 0:
+                            <div class="row mb-1">
+                                <h3>Okay, Let's name your team!</h3>
+                            </div>
+                            <div class="row mb-1">
+                                <CreateTeamComponent TeamName="@_createTeamView.Name"></CreateTeamComponent>
+                            </div>
+                            break;
+                        case 1:
+                            <div class="row mb-1">
+                                <h3>Now Lets add some Members, You can skip this for now if you'd like!</h3>
+                            </div>
+                            <div class="row mb-1">
+                                <UserCollectionComponent @bind-SelectedUsers="_createTeamView.MemberIds"></UserCollectionComponent>
+                            </div>
+                            break;
+                        case 2:
+                            <div class="row mb-1">
+                                <h3>Now Lets select some projects, You can skip this for now if you'd like!</h3>
+                            </div>
+                            <div class="row mb-1">
+                                <ProjectCollectionComponent @bind-SelectedProjects="_createTeamView.ProjectIds"></ProjectCollectionComponent>
+                            </div>
+                            break;
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4  align-self-start" style="@GetButtonStyle(_currentStage != 0)">
+                    <button class="btn btn-primary" @onclick="OnBackClicked">Back</button>
+                </div>
+                <div class="col-4  align-self-end" style="@GetButtonStyle(_currentStage != _totalStages)">
+                    <button class="btn btn-primary" @onclick="OnNextClicked">Next</button>
+                </div>
+                <div class="col-4  align-self-end" style="@GetButtonStyle(_currentStage == _totalStages)">
+                    <button class="btn btn-primary" @onclick="OnSubmitClicked">Submit!</button>
+                </div>
+            </div>
+        </div>*@
+    <h1 class="mb-3">Create a Team</h1>
+    <div class="progress progress-striped active mb-3">
+        <div class="progress-bar" role="progressbar" aria-valuenow="@(_currentStage * (100 / _totalStages))" aria-valuemin="0" aria-valuemax="100" style="width: @(_currentStage * (100 / _totalStages))%; height: 20px;">@_currentStage/@_totalStages</div>
+    </div>
+    <div class="card">
+        <div class="row justify-content-center">
+            <div class="col-10">
+                <EditForm EditContext="_editContext" OnValidSubmit="async () => await HandleValidSubmit()" OnInvalidSubmit="HandleInvalidSubmit">
+                    <div class="alert @_statusClass">@_statusMessage</div>
+                    <DataAnnotationsValidator/>
+                    <ValidationSummary/>
+                    @switch (_currentStage)
+                    {
+                        case 0:
+                            <h2>First let's pick a name</h2>
+                            <div class="form-group">
+                                <label for="name">Team Name</label>
+                                <InputText id="name" class="form-control" type="text" placeholder="Enter Name" @bind-Value="_createTeamView.Name"/>
+                                <ValidationMessage For="() => _createTeamView.Name"></ValidationMessage>
+                            </div>
+                            <div class="d-flex justify-content-end mb-3">
+                                <button class="btn btn-primary" @onclick="OnNextClicked">Next</button>
+                            </div>
+                            break;
+                        case 1:
+                            <h2>Awesome! now you can add some projects, or just do this later</h2>
+                            <ProjectCollectionComponent @bind-SelectedProjects="_createTeamView.ProjectIds"></ProjectCollectionComponent>
+                            <div class="d-flex justify-content-between mb-3">
+                                <button class="btn btn-primary" @onclick="OnBackClicked">Back</button>
+                                <button class="btn btn-primary" @onclick="OnNextClicked">Next</button>
+                            </div>
+                            break;
+                        case 2:
+                            <h2>Finally you can add some users if you'd like</h2>
+                            <UserCollectionComponent @bind-SelectedUsers="_createTeamView.MemberIds"></UserCollectionComponent>
+                            <div class="d-flex justify-content-between mb-3">
+                                <button class="btn btn-primary" @onclick="OnBackClicked">Back</button>
+                                <button type="submit" class="btn btn-primary" @onclick="() => _formComplete = true">Submit</button>
+                            </div>
+                            break;
+                    }
+                </EditForm>
+            </div>
         </div>
     </div>
-</div>
+}
+
+
 
 @code{
+    private string _statusClass;
+    private string _statusMessage;
+    private bool _executionFailed = false;
+    private bool _formComplete = false;
+    private bool _loading = false;
     private ushort _currentStage = 0;
     private readonly ushort _totalStages = 2;
-    private CreateTeamView _createTeamView = new CreateTeamView();
+    private CreateTeamView _createTeamView;
+    private EditContext _editContext;
 
+
+    protected override void OnInitialized()
+    {
+        _createTeamView = new CreateTeamView();
+        _editContext = new EditContext(_createTeamView);
+        base.OnInitialized();
+    }
 
     private void OnNextClicked()
     {
-        _currentStage++;
+        if(_editContext.Validate())
+            _currentStage++;
     }
     private void OnBackClicked()
     {
         _currentStage--;
     }
-    private async Task OnSubmitClicked()
+    private async Task HandleValidSubmit()
     {
-        try
+        if (_formComplete)
         {
-            var result = await TeamsController.AddTeamAsync(_createTeamView.Name);
-            NavMan.NavigateTo($"Teams/{result.Id}");
+            try
+            {
+                var result = await TeamsController.AddTeamAsync(_createTeamView.Name);
+                _loading = true;
+                await Task.Delay(3000);
+                NavMan.NavigateTo($"Teams/{result.Id}");
+            }
+            catch (Exception e)
+            {
+                _executionFailed = true;
+            }
         }
-        catch(Exception e)
-        {
+    }
 
-        }
+    private void HandleInvalidSubmit()
+    {
+        _statusClass = "alert-info";
+        _statusMessage = "Whoops";
     }
 
     private string GetButtonStyle(bool isVisible)

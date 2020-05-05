@@ -3,23 +3,22 @@
 @using HackSite.Pages.Components.Collections.Fragments
 @inject ProjectsController ProjectsController
 
-<div class="card">
-    <div class="card-title">Projects</div>
-    <div class="card-body">
-        @if (_projectViews == null)
-        {
-            <p><em>loading</em></p>
-        }
-        else
-        {
-            <ul class="list-group">
-                @foreach (var projectView in _projectViews)
-                {
-                    <ProjectFragment ProjectView="projectView" OnSelected="OnItemSelected" OnDeselected="OnItemDeselcted"></ProjectFragment>
-                }
-            </ul>
-        }
-    </div>
+<div class="form-group m">
+    <label for="projects">Projects</label>
+
+    @if (_projectViews == null)
+    {
+        <p><em>loading</em></p>
+    }
+    else
+    {
+        <div id="projects" class="list-group">
+            @foreach (var projectView in _projectViews)
+            {
+                <ProjectFragment ProjectView="projectView" OnSelected="OnItemSelected" OnDeselected="OnItemDeselcted"></ProjectFragment>
+            }
+        </div>
+    }
 </div>
 
 @code{

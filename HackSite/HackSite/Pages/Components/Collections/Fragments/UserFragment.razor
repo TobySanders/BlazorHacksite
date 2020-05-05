@@ -1,14 +1,10 @@
 ﻿@using HackSite.Views
-<li class="list-group-item @rowClass" @onclick="OnCheckbox">
-    <div class="row">
-        <div class="col">
-            @UserView.Username
-        </div>
-        <div class="col">
-            <a class="card-link" href="/Users/@UserView.Id">View User</a>
-        </div>
+<a class="list-group-item @_rowClass" @onclick="OnItemClicked">
+    <div class="d-flex justify-content-between">
+        @UserView.Username
+        <a class="card-link align-self-end" href="/Users/@UserView.Id">View User</a>
     </div>
-</li>
+</a>
 
 @code{
     [Parameter]
@@ -18,19 +14,19 @@
     [Parameter]
     public EventCallback<Guid> OnDeselected { get; set; }
 
-    private bool isSelected;
-    private string rowClass = rowClassDeselcted;
+    private bool _isSelected;
+    private string _rowClass = RowClassDeselected;
 
-    private const string rowClassSelected = "bg-primary";
-    private const string rowClassDeselcted = "bg-secondary";
+    private const string RowClassSelected = "list-group-item list-group-item-action active";
+    private const string RowClassDeselected = "list-group-item list-group-item-action";
 
-    public void OnCheckbox()
+    public void OnItemClicked()
     {
-        isSelected = !isSelected;
+        _isSelected = !_isSelected;
 
-        rowClass = isSelected ? rowClassSelected : rowClassDeselcted;
+        _rowClass = _isSelected ? RowClassSelected : RowClassDeselected;
 
-        if (isSelected)
+        if (_isSelected)
         {
             OnSelected.InvokeAsync(UserView.Id);
         }
