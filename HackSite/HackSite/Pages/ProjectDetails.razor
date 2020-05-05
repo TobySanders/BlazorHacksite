@@ -9,7 +9,13 @@
 
 @if (project == null || teams == null)
 {
-    <p><em>Loading...</em></p>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                <span class="sr-only">Just finishing up...</span>
+            </div>
+        </div>
+    </div>
 }
 else
 {

@@ -17,11 +17,11 @@ namespace HackSite.Controllers
             _usersRepository = usersRepository;
         }
 
-        public async Task<UserView> AddUserAsync(string username)
+        public async Task<UserView> AddUserAsync(CreateUserView userView)
         {
             var user = new User
             {
-                Username = username
+                Username = userView.Username
             };
             var result = await _usersRepository.CreateAsync(user);
             return result.Map();

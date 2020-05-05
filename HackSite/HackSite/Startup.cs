@@ -41,7 +41,7 @@ namespace HackSite
             }
             else
             {
-                services.Configure<TableSettings>(Configuration);
+                services.Configure<TableSettings>(Configuration.GetSection("TableSettings"));
                 services.AddSingleton<ITableStorageProvider<ProjectTableEntity, Guid>, ProjectTableStorageProvider>()
                    .AddSingleton<ITableStorageProvider<TeamTableEntity, Guid>, TeamTableStorageProvider>()
                    .AddSingleton<ITableStorageProvider<UserTableEntity,Guid>, UserTableStorageProvider>();

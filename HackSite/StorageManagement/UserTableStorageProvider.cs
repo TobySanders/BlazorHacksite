@@ -14,42 +14,42 @@ namespace StorageProviders
     {
         private readonly CloudStorageAccount cloudStorageAccount;
         private readonly CloudTableClient cloudTableClient;
-        private readonly CloudTable usersTable;
+        private readonly CloudTable _usersTable;
 
         public UserTableStorageProvider(IOptions<TableSettings> tableSettings)
         {
             var connectionString = tableSettings.Value.ConnectionString;
             cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
             cloudTableClient = cloudStorageAccount.CreateCloudTableClient();
-            usersTable = cloudTableClient.GetTableReference("Users");
+            _usersTable = cloudTableClient.GetTableReference("Users");
         }
 
         public async Task<UserTableEntity> CreateAsync(UserTableEntity entity)
         {
-            await usersTable.CreateIfNotExistsAsync();
+            await _usersTable.CreateIfNotExistsAsync();
             var insertOperation = TableOperation.Insert(entity);
-            var result = await usersTable.ExecuteAsync(insertOperation);
+            var result = await _usersTable.ExecuteAsync(insertOperation);
 
             return result.Result as UserTableEntity;
         }
 
         public async Task<UserTableEntity> ReadAsync(Guid userId)
         {
-            await usersTable.CreateIfNotExistsAsync();
+            await _usersTable.CreateIfNotExistsAsync();
 
             var tableEntity = new UserTableEntity(userId);
 
             var retrieveOperation = TableOperation.Retrieve<UserTableEntity>(tableEntity.PartitionKey, tableEntity.RowKey);
-            var result = await usersTable.ExecuteAsync(retrieveOperation);
+            var result = await _usersTable.ExecuteAsync(retrieveOperation);
 
             return result.Result as UserTableEntity;
         }
 
         public async Task<UserTableEntity> UpdateAsync(UserTableEntity entity)
         {
-            await usersTable.CreateIfNotExistsAsync();
+            await _usersTable.CreateIfNotExistsAsync();
             var updateOperation = TableOperation.Replace(entity);
-            var result = await usersTable.ExecuteAsync(updateOperation);
+            var result = await _usersTable.ExecuteAsync(updateOperation);
 
             return result.Result as UserTableEntity;
         }
@@ -58,17 +58,31 @@ namespace StorageProviders
         {
             var tableEntity = new UserTableEntity(userId);
             var retrieveOperation = TableOperation.Retrieve<UserTableEntity>(tableEntity.PartitionKey, tableEntity.RowKey);
-            var result = await usersTable.ExecuteAsync(retrieveOperation);
+            var result = await _usersTable.ExecuteAsync(retrieveOperation);
 
             tableEntity = result.Result as UserTableEntity;
 
             var deleteOperation = TableOperation.Delete(tableEntity);
-            await usersTable.ExecuteAsync(deleteOperation);
+            await _usersTable.ExecuteAsync(deleteOperation);
         }
 
-        public Task<List<UserTableEntity>> ReadAllAsync()
+        public async Task<List<UserTableEntity>> ReadAllAsync()
         {
-            throw new System.NotImplementedException();
+            await _usersTable.CreateIfNotExistsAsync();
+
+            var tableQuery = new TableQuery<UserTableEntity>();
+            var token = new TableContinuationToken();
+            var entities = new List<UserTableEntity>();
+
+            do
+            {
+                var queryResult = await _usersTable.ExecuteQuerySegmentedAsync(tableQuery, token);
+                entities.AddRange(queryResult);
+                token = queryResult.ContinuationToken;
+
+            } while (token != null);
+
+            return entities;
         }
     }
 }

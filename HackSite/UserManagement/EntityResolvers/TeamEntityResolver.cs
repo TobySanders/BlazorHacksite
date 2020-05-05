@@ -21,13 +21,7 @@ namespace UserManagement.EntityResolvers
 
         public TeamTableEntity ToSourceType(Team entity)
         {
-            return new TeamTableEntity
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                MemberIds = entity.Members?.Select(p => p.Id).ToList() ?? new List<Guid>(),
-                ProjectIds = entity.Projects?.Select(p => p.Id).ToList() ?? new List<Guid>()
-            };
+            return new TeamTableEntity(entity);
         }
     }
 }

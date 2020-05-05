@@ -1,4 +1,5 @@
 ﻿using StorageProviders.Abstractions.Models;
+using System;
 using UserManagement.Abstractions.Models;
 
 namespace UserManagement.EntityResolvers
@@ -18,13 +19,7 @@ namespace UserManagement.EntityResolvers
 
         public ProjectTableEntity ToSourceType(Project entity)
         {
-            return new ProjectTableEntity
-            {
-                Id = entity.Id,
-                Title = entity.Title,
-                Description = entity.Description,
-                RepositoryUrl = entity.RepositoryUrl
-            };
+            return new ProjectTableEntity(entity);
         }
     }
 }

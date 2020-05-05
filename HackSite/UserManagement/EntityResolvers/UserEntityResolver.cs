@@ -17,11 +17,15 @@ namespace UserManagement.EntityResolvers
 
         public UserTableEntity ToSourceType(User entity)
         {
-            return new UserTableEntity
+            var tableEntity = new  UserTableEntity
             {
                 Id = entity.Id == Guid.Empty ? Guid.NewGuid() : entity.Id,
-                Username = entity.Username
+                Username = entity.Username,
+                PartitionKey = "0"
             };
+            tableEntity.RowKey = tableEntity.Id.ToString();
+
+            return tableEntity;
         }
     }
 }

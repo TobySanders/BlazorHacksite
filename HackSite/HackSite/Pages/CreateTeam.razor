@@ -28,56 +28,6 @@
 }
 else
 {
-    @*<div class="container-fluid justify-content-center">
-            <div class="row mb-5">
-                <h1>Step: @_currentStage of @_totalStages</h1>
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: @(_currentStage * (100 / _totalStages))%" aria-valuenow="@(_currentStage * (100 / _totalStages))" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    @switch (_currentStage)
-                    {
-                        case 0:
-                            <div class="row mb-1">
-                                <h3>Okay, Let's name your team!</h3>
-                            </div>
-                            <div class="row mb-1">
-                                <CreateTeamComponent TeamName="@_createTeamView.Name"></CreateTeamComponent>
-                            </div>
-                            break;
-                        case 1:
-                            <div class="row mb-1">
-                                <h3>Now Lets add some Members, You can skip this for now if you'd like!</h3>
-                            </div>
-                            <div class="row mb-1">
-                                <UserCollectionComponent @bind-SelectedUsers="_createTeamView.MemberIds"></UserCollectionComponent>
-                            </div>
-                            break;
-                        case 2:
-                            <div class="row mb-1">
-                                <h3>Now Lets select some projects, You can skip this for now if you'd like!</h3>
-                            </div>
-                            <div class="row mb-1">
-                                <ProjectCollectionComponent @bind-SelectedProjects="_createTeamView.ProjectIds"></ProjectCollectionComponent>
-                            </div>
-                            break;
-                    }
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-4  align-self-start" style="@GetButtonStyle(_currentStage != 0)">
-                    <button class="btn btn-primary" @onclick="OnBackClicked">Back</button>
-                </div>
-                <div class="col-4  align-self-end" style="@GetButtonStyle(_currentStage != _totalStages)">
-                    <button class="btn btn-primary" @onclick="OnNextClicked">Next</button>
-                </div>
-                <div class="col-4  align-self-end" style="@GetButtonStyle(_currentStage == _totalStages)">
-                    <button class="btn btn-primary" @onclick="OnSubmitClicked">Submit!</button>
-                </div>
-            </div>
-        </div>*@
     <h1 class="mb-3">Create a Team</h1>
     <div class="progress progress-striped active mb-3">
         <div class="progress-bar" role="progressbar" aria-valuenow="@(_currentStage * (100 / _totalStages))" aria-valuemin="0" aria-valuemax="100" style="width: @(_currentStage * (100 / _totalStages))%; height: 20px;">@_currentStage/@_totalStages</div>
@@ -161,9 +111,8 @@ else
         {
             try
             {
-                var result = await TeamsController.AddTeamAsync(_createTeamView);
                 _loading = true;
-                await Task.Delay(3000);
+                var result = await TeamsController.AddTeamAsync(_createTeamView);
                 NavMan.NavigateTo($"Teams/{result.Id}");
             }
             catch (Exception e)

@@ -8,16 +8,18 @@
 
     @if (_projectViews == null)
     {
-        <p><em>loading</em></p>
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Just finishing up...</span>
+    </div>
     }
     else
     {
-        <div id="projects" class="list-group">
-            @foreach (var projectView in _projectViews)
+    <div id="projects" class="list-group">
+        @foreach (var projectView in _projectViews)
             {
-                <ProjectFragment ProjectView="projectView" OnSelected="OnItemSelected" OnDeselected="OnItemDeselcted"></ProjectFragment>
+        <ProjectFragment ProjectView="projectView" OnSelected="OnItemSelected" OnDeselected="OnItemDeselcted"></ProjectFragment>
             }
-        </div>
+    </div>
     }
 </div>
 
