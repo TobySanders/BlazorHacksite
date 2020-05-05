@@ -1,0 +1,88 @@
+﻿@page "/Teams/Create"
+@using HackSite.Controllers 
+@using HackSite.Pages.Components
+@using HackSite.Pages.Components.Collections
+@using HackSite.Views
+
+@inject TeamsController TeamsController
+@inject NavigationManager NavMan
+<div class="container">
+    <div class="row mb-5">
+        <p>Step: @_currentStage of @_totalStages</p>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            @switch (_currentStage)
+            {
+                case 0:
+                    <div class="row mb-1">
+                        <h3>Okay, Let's name your team!</h3>
+                    </div>
+                    <div class="row mb-1">
+                        <CreateTeamComponent TeamName="@_createTeamView.Name"></CreateTeamComponent>
+                    </div>
+                    break;
+                case 1:
+                    <div class="row mb-1">
+                        <h3>Now Lets add some Members, You can skip this for now if you'd like!</h3>
+                    </div>
+                    <div class="row mb-1">
+                        @*<UserCollectionComponent @bind-SelectedUsers="_createTeamView.MemberIds"></UserCollectionComponent>*@
+                    </div>
+                    break;
+                case 2:
+                    <div class="row mb-1">
+                        <h3>Now Lets select some projects, You can skip this for now if you'd like!</h3>
+                    </div>
+                    <div class="row mb-1">
+                        <ProjectCollectionComponent @bind-SelectedProjects="_createTeamView.ProjectIds"></ProjectCollectionComponent>
+                    </div>
+                    break;
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4  align-self-start">
+            <button class="btn btn-primary" style="@GetButtonStyle(_currentStage==0)" @onclick="OnBackClicked">Back</button>
+        </div>
+        <div class="col-4  align-self-end">
+            <button class="btn btn-primary" style="@GetButtonStyle(!(_currentStage==_totalStages))" @onclick="OnNextClicked">Next</button>
+        </div>
+        <div class="col-4  align-self-end">
+            <button class="btn btn-primary" style="@GetButtonStyle(_currentStage==_totalStages)" @onclick="OnSubmitClicked">Submit!</button>
+        </div>
+    </div>
+</div>
+
+@code{
+    private ushort _currentStage = 0;
+    private readonly ushort _totalStages = 2;
+    private CreateTeamView _createTeamView = new CreateTeamView();
+
+
+    private void OnNextClicked()
+    {
+        _currentStage++;
+    }
+    private void OnBackClicked()
+    {
+        _currentStage--;
+    }
+    private async Task OnSubmitClicked()
+    {
+        try
+        {
+            var result = await TeamsController.AddTeamAsync(_createTeamView.Name);
+            NavMan.NavigateTo($"Teams/{result.Id}");
+        }
+        catch(Exception e)
+        {
+
+        }
+    }
+
+    private string GetButtonStyle(bool isVisible)
+    {
+        return isVisible ? "display:inline-block" : "display:none";
+    }
+}

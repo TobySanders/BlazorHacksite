@@ -1,0 +1,12 @@
+﻿@using HackSite.Views
+
+<div class="form-group">
+    <label>Team Name</label>
+    <input type="text" placeholder="Enter Name" @bind-value="TeamName" />
+</div>
+
+@code{
+    public EventCallback OnError { get; set; }
+    [Parameter]
+    public string TeamName { get; set; }
+}
