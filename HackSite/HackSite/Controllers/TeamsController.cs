@@ -17,11 +17,13 @@ namespace HackSite.Controllers
             _teamRepository = teamRepository;
         }
 
-        public async Task<TeamView> AddTeamAsync(string teamName)
+        public async Task<TeamView> AddTeamAsync(CreateTeamView teamView)
         {
             var team = new Team
             {
-                Name = teamName
+                Name = teamView.Name,
+                Members = teamView.MemberIds.Select(memberId=>new User{Id = memberId}).ToList(),
+                Projects = teamView.ProjectIds.Select(memberId => new Project { Id = memberId }).ToList()
             };
 
             var result = await _teamRepository.CreateAsync(team);

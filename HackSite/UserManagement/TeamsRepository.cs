@@ -24,7 +24,6 @@ namespace UserManagement
             _projectsRepository = projectsRepository;
             _usersRepository = userRepository;
         }
-
         public override async Task<Team> ReadAsync(Guid key)
         {
             var tableResult = await _teamTableStorageProvider.ReadAsync(key);

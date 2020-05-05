@@ -43,7 +43,8 @@ namespace HackSite
             {
                 services.Configure<TableSettings>(Configuration);
                 services.AddSingleton<ITableStorageProvider<ProjectTableEntity, Guid>, ProjectTableStorageProvider>()
-                   .AddSingleton<ITableStorageProvider<TeamTableEntity, Guid>, TeamTableStorageProvider>();
+                   .AddSingleton<ITableStorageProvider<TeamTableEntity, Guid>, TeamTableStorageProvider>()
+                   .AddSingleton<ITableStorageProvider<UserTableEntity,Guid>, UserTableStorageProvider>();
             }
 
             services.AddProjectsRepository()
