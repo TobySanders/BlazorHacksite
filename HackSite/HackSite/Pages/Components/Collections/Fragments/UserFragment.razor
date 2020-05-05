@@ -1,0 +1,38 @@
+﻿@using HackSite.Views
+<a class="list-group-item @_rowClass" @onclick="OnItemClicked">
+    <div class="d-flex justify-content-between">
+        @UserView.Username
+        <a class="card-link align-self-end" href="/Users/@UserView.Id">View User</a>
+    </div>
+</a>
+
+@code{
+    [Parameter]
+    public UserView UserView { get; set; }
+    [Parameter]
+    public EventCallback<Guid> OnSelected { get; set; }
+    [Parameter]
+    public EventCallback<Guid> OnDeselected { get; set; }
+
+    private bool _isSelected;
+    private string _rowClass = RowClassDeselected;
+
+    private const string RowClassSelected = "list-group-item list-group-item-action active";
+    private const string RowClassDeselected = "list-group-item list-group-item-action";
+
+    public void OnItemClicked()
+    {
+        _isSelected = !_isSelected;
+
+        _rowClass = _isSelected ? RowClassSelected : RowClassDeselected;
+
+        if (_isSelected)
+        {
+            OnSelected.InvokeAsync(UserView.Id);
+        }
+        else
+        {
+            OnDeselected.InvokeAsync(UserView.Id);
+        }
+    }
+}

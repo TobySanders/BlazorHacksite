@@ -1,0 +1,93 @@
+﻿@page "/Users/Create"
+@using HackSite.Controllers
+@using HackSite.Pages.Components
+@using HackSite.Pages.Components.Collections
+@using HackSite.Views
+@using HackSite.Pages.Shared
+
+@inject UsersController UsersController
+@inject NavigationManager NavMan
+
+@if (_executionFailed)
+{
+    <PageMessage MessageAlertType="PageMessage.AlertType.Danger"
+                 Header="Something went wrong!"
+                 BodyBefore="Looks like something went wrong on our end. This issue is reported to the relevant team automatically and it will be fixed as soon as possible. Sorry for the inconvenience!" />
+}
+else if (_loading)
+{
+    <div class="container">
+        <div class="row mb-3 justify-content-center">
+            <h2 class="text-primary">Just finishing up...</h2>
+        </div>
+        <div class="row justify-content-center">
+            <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                <span class="sr-only">Just finishing up...</span>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h1 class="mb-3">Create a User</h1>
+    <div class="card">
+        <div class="row justify-content-center">
+            <div class="col-10">
+                <EditForm EditContext="_editContext" OnValidSubmit="async () => await HandleValidSubmit()" OnInvalidSubmit="HandleInvalidSubmit">
+                    <div class="alert @_statusClass">@_statusMessage</div>
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <h2>First let's pick a username</h2>
+                    <div class="form-group">
+                        <label for="name">userame</label>
+                        <InputText id="name" class="form-control" type="text" placeholder="Enter Name" @bind-Value="_createUserView.Username" />
+                        <ValidationMessage For="() => _createUserView.Username"></ValidationMessage>
+                    </div>
+                    <div class="d-flex justify-content-end mb-3">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@code{
+    private string _statusClass;
+    private string _statusMessage;
+    private bool _executionFailed = false;
+    private bool _loading = true;
+    private CreateUserView _createUserView;
+    private EditContext _editContext;
+
+
+    protected override void OnInitialized()
+    {
+        _createUserView = new CreateUserView();
+        _editContext = new EditContext(_createUserView);
+        base.OnInitialized();
+        _loading = false;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            _loading = true;
+            var result = await UsersController.AddUserAsync(_createUserView);
+            NavMan.NavigateTo($"Users/{result.Id}");
+        }
+        catch (Exception e)
+        {
+            _executionFailed = true;
+        }
+    }
+
+    private void HandleInvalidSubmit()
+    {
+        _statusClass = "alert alert-danger";
+        _statusMessage = "Looks like you missed something!";
+    }
+}

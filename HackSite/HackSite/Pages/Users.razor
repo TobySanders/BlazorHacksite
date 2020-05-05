@@ -1,17 +1,15 @@
-﻿@page "/Teams"
+﻿@page "/Users"
 
 @using HackSite.Controllers
 @using HackSite.Views
 @using HackSite.Pages.Components
 
-@inject TeamsController TeamsController
-@inject ProjectsController ProjectsController
+@inject UsersController UsersController
 
-<h1>Teams and Projects</h1>
+<h1>Users</h1>
 
-<p>This component demonstrates fetching data from a service.</p>
 
-@if (teamViews == null || projectViews == null)
+@if (_userViews == null)
 {
     <div class="container">
         <div class="row justify-content-center">
@@ -25,11 +23,11 @@ else
 {
     <h2>Teams</h2>
     <div class="container">
-        @foreach (var team in teamViews)
+        @foreach (var user in _userViews)
         {
             <div class="row mb-1">
                 <div class="col">
-                    <TeamPreviewComponent TeamView="@team"></TeamPreviewComponent>
+                    <UserCard UserView="@user"></UserCard>
                 </div>
             </div>
         }
@@ -37,13 +35,10 @@ else
 }
 
 @code {
-
-    private TeamView[] teamViews;
-    private ProjectView[] projectViews;
+    private UserView[] _userViews;
 
     protected override async Task OnInitializedAsync()
     {
-        teamViews = await TeamsController.GetTeamsAsync();
-        projectViews = await ProjectsController.GetProjectsAsync();
+        _userViews = await UsersController.GetUsersAsync();
     }
 }

@@ -1,0 +1,30 @@
+﻿@page "/Teams/{guidString}/Manage"
+@using HackSite.Pages.Components
+@using HackSite.Views
+@using HackSite.Controllers
+
+@inject TeamsController TeamsController
+
+@if (TeamView == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="container">
+        Hello World
+        <ManageTeamComponent TeamView="@TeamView"></ManageTeamComponent>
+    </div>
+}
+@code{
+    [Parameter]
+    public string guidString { get; set; }
+
+    private TeamView TeamView;
+
+    protected override async Task OnInitializedAsync()
+    {
+        TeamView = await TeamsController.GetTeamAsync(Guid.Parse(guidString));
+    }
+
+}

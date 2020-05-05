@@ -1,0 +1,12 @@
+﻿@using HackSite.Views
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-8 text-left">@TeamView.Name</div>
+            <a class="btn btn-primary col" href="/Teams/@TeamView.Id">View Team</a>
+        </div>
+    </li>
+
+@code{
+    [Parameter]
+    public TeamView TeamView { get; set; }
+}

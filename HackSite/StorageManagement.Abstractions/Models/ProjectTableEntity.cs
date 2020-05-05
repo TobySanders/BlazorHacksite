@@ -30,7 +30,7 @@ namespace StorageProviders.Abstractions.Models
 
         public ProjectTableEntity(Guid id)
         {
-            Id = Id;
+            Id = id;
 
             PartitionKey = "0";
             RowKey = Id.ToString();

@@ -1,14 +1,13 @@
-﻿@page "/Teams/{guidString}"
+﻿@page "/Users/{guidString}"
 
 @using HackSite.Controllers;
 @using HackSite.Views;
 @using HackSite.Pages.Components
-@inject ProjectsController projectsController;
-@inject TeamsController teamsController;
+@inject UsersController UsersController
 
 <h3>Team Details</h3>
 
-@if (team == null)
+@if (_userView == null)
 {
     <div class="container">
         <div class="row justify-content-center">
@@ -20,24 +19,23 @@
 }
 else
 {
-    <TeamComponent TeamView="@team"></TeamComponent>
+    <UserCard UserView="@_userView"></UserCard>
 }
 
 @code {
     [Parameter]
     public String GuidString { get; set; }
 
-    private Guid teamGuid;
-    private TeamView team;
+    private Guid _userGuid;
+    private UserView _userView;
 
     protected override async Task OnInitializedAsync()
     {
-        Guid.TryParse(GuidString, out teamGuid);
+        Guid.TryParse(GuidString, out _userGuid);
 
-        if (teamGuid != Guid.Empty)
+        if (_userGuid != Guid.Empty)
         {
-            var teamTask = teamsController.GetTeamAsync(teamGuid);
-            team = await teamTask;
+            _userView = await UsersController.GetUserAsync(_userGuid);
         }
     }
 }
