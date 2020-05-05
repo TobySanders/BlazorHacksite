@@ -161,7 +161,7 @@ else
         {
             try
             {
-                var result = await TeamsController.AddTeamAsync(_createTeamView.Name);
+                var result = await TeamsController.AddTeamAsync(_createTeamView);
                 _loading = true;
                 await Task.Delay(3000);
                 NavMan.NavigateTo($"Teams/{result.Id}");

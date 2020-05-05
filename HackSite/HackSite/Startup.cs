@@ -52,7 +52,8 @@ namespace HackSite
                 .AddUserRepository();
 
             services.AddSingleton<TeamsController>()
-                .AddSingleton<ProjectsController>(); //no idea if this should be singleton or not but the visual studio template used singleton
+                .AddSingleton<ProjectsController>()
+                .AddSingleton<UsersController>(); //no idea if this should be singleton or not but the visual studio template used singleton
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

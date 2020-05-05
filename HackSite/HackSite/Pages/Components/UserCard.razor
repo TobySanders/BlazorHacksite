@@ -1,0 +1,69 @@
+﻿@using HackSite.Views
+@using HackSite.Controllers
+@using HackSite.Pages.Components.Links
+@inject ProjectsController ProjectsController
+@inject TeamsController TeamsController
+<div class="card">
+    <div class="card text-center">
+        <div class="card-body color-primary">
+            <h1 class="card-title">@UserView?.Username</h1>
+        </div>
+        @if (_loading)
+        {
+            <div class="row justify-content-center">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 6rem;" role="status">
+                    <span class="sr-only">Just finishing up...</span>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="card-header">
+                Teams
+            </div>
+            <ul class="list-group list-group-flush">
+                @foreach (var team in _teamViews)
+                {
+                    <TeamLink teamView="@team"></TeamLink>
+                }
+            </ul>
+            <div class="card-header">
+                Projects
+            </div>
+            <div class="card-deck">
+                @foreach (var project in _projectViews)
+                {
+                    <ProjectLink projectView="@project"></ProjectLink>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code{
+    [Parameter]
+    public UserView UserView { get; set; }
+
+    private ProjectView[] _projectViews;
+    private TeamView[] _teamViews;
+    private bool _loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _teamViews = await TeamsController.GetTeamsByUserAsync(UserView.Id);
+        var projectViews = new List<ProjectView>();
+
+        foreach (var teamView in _teamViews)
+        {
+            projectViews.AddRange(teamView.Projects);
+        }
+        _projectViews = projectViews
+            .GroupBy(p=>p.Id)
+            .Select(group=>group.First())
+            .ToArray();
+
+        await base.OnInitializedAsync();
+        _loading = false;
+    }
+
+}

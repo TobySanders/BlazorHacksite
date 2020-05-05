@@ -28,12 +28,6 @@ else
             </div>
         }
     </div>
-    <div>
-        <button @onclick="MakeTeam">Make Team!</button>
-        <button @onclick="AddProjectToTeam">Add Project!</button>
-        <button @onclick="Refresh">Refresh!</button>
-    </div>
-
 }
 
 @code {
@@ -45,24 +39,5 @@ else
     {
         teamViews = await TeamsController.GetTeamsAsync();
         projectViews = await ProjectsController.GetProjectsAsync();
-    }
-
-    public async Task MakeTeam()
-    {
-        await TeamsController.AddTeamAsync("Team German Donner");
-        await Refresh();
-    }
-    public async Task Refresh()
-    {
-        teamViews = await TeamsController.GetTeamsAsync();
-        projectViews = await ProjectsController.GetProjectsAsync();
-    }
-    public async Task AddProjectToTeam()
-    {
-        var subject = teamViews[0];
-        var project = await ProjectsController.GetProjectAsync(Guid.Parse("891f1907-dbfc-461e-a67f-b52755da2251"));
-        subject.Projects.Add(project);
-        await TeamsController.UpdateTeamAsync(subject);
-        await Refresh();
     }
 }
