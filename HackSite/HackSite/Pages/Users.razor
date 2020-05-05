@@ -1,0 +1,44 @@
+﻿@page "/Users"
+
+@using HackSite.Controllers
+@using HackSite.Views
+@using HackSite.Pages.Components
+
+@inject UsersController UsersController
+
+<h1>Users</h1>
+
+
+@if (_userViews == null)
+{
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                <span class="sr-only">Just finishing up...</span>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h2>Teams</h2>
+    <div class="container">
+        @foreach (var user in _userViews)
+        {
+            <div class="row mb-1">
+                <div class="col">
+                    <UserCard UserView="@user"></UserCard>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private UserView[] _userViews;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _userViews = await UsersController.GetUsersAsync();
+    }
+}

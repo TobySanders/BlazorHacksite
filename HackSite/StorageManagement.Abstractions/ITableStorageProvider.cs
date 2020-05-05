@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 
 namespace StorageProviders.Abstractions
 {
-    public interface ITableStorageProvider<TModel>
+    public interface ITableStorageProvider<TTableEntity,TKey>
     {
-        Task<TModel> CreateAsync(TModel model);
-        Task<TModel> UpdateAsync(TModel model);
-        Task<TModel> ReadAsync(string key);
-        Task<List<TModel>> ReadAllAsync();
-        Task DeleteAsync(string key);
+        Task<TTableEntity> CreateAsync(TTableEntity model);
+        Task<TTableEntity> UpdateAsync(TTableEntity model);
+        Task<TTableEntity> ReadAsync(TKey key);
+        Task<List<TTableEntity>> ReadAllAsync();
+        Task DeleteAsync(TKey key);
     }
 }

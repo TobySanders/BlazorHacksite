@@ -1,0 +1,48 @@
+﻿@using HackSite.Controllers
+@using HackSite.Views
+@using HackSite.Pages.Components.Collections.Fragments
+@inject UsersController UsersController
+<div class="form-group">
+    <label for="users">Users</label>
+
+    @if (_userViews == null)
+    {
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Just finishing up...</span>
+        </div>
+    }
+    else
+    {
+        <div id="users" class="list-group">
+            @foreach (var userView in _userViews)
+            {
+                <UserFragment UserView="userView" OnSelected="OnItemSelected" OnDeselected="OnItemDeselcted"></UserFragment>
+            }
+        </div>
+    }
+</div>
+
+@code{
+    private UserView[] _userViews;
+
+    [Parameter]
+    public List<Guid> SelectedUsers { get; set; }
+    [Parameter]
+    public EventCallback<List<Guid>> SelectedUsersChanged { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _userViews = await UsersController.GetUsersAsync();
+    }
+
+    private void OnItemSelected(Guid id)
+    {
+        SelectedUsers.Add(id);
+        SelectedUsersChanged.InvokeAsync(SelectedUsers);
+    }
+    private void OnItemDeselcted(Guid id)
+    {
+        SelectedUsers.Remove(id);
+        SelectedUsersChanged.InvokeAsync(SelectedUsers);
+    }
+}

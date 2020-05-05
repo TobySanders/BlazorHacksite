@@ -1,0 +1,43 @@
+﻿@page "/Teams/{guidString}"
+
+@using HackSite.Controllers;
+@using HackSite.Views;
+@using HackSite.Pages.Components
+@inject ProjectsController projectsController;
+@inject TeamsController teamsController;
+
+<h3>Team Details</h3>
+
+@if (team == null)
+{
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                <span class="sr-only">Just finishing up...</span>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <TeamComponent TeamView="@team"></TeamComponent>
+}
+
+@code {
+    [Parameter]
+    public String GuidString { get; set; }
+
+    private Guid teamGuid;
+    private TeamView team;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Guid.TryParse(GuidString, out teamGuid);
+
+        if (teamGuid != Guid.Empty)
+        {
+            var teamTask = teamsController.GetTeamAsync(teamGuid);
+            team = await teamTask;
+        }
+    }
+}

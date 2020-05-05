@@ -4,8 +4,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StorageProviders;
 using StorageProviders.Abstractions;
+using StorageProviders.Abstractions.Models;
+using StorageProviders.Abstractions.Settings;
 using StorageProviders.Mocks;
+using System;
 using UserManagement;
 using UserManagement.Abstractions;
 using UserManagement.Abstractions.Models;
@@ -31,14 +35,25 @@ namespace HackSite
 
             if (Configuration.GetValue<bool>("UseLocalStorage"))
             {
-                services.AddSingleton<ITableStorageProvider<User>, UserTableStorageMock>().
-                    AddSingleton<ITableStorageProvider<Team>, TeamTableStroageMock>();
+                services.AddSingleton<ITableStorageProvider<UserTableEntity, Guid>, UserTableStorageMock>().
+                    AddSingleton<ITableStorageProvider<TeamTableEntity, Guid>, TeamTableStroageMock>().
+                    AddSingleton<ITableStorageProvider<ProjectTableEntity, Guid>, ProjectTableStorageMock>();
+            }
+            else
+            {
+                services.Configure<TableSettings>(Configuration.GetSection("TableSettings"));
+                services.AddSingleton<ITableStorageProvider<ProjectTableEntity, Guid>, ProjectTableStorageProvider>()
+                   .AddSingleton<ITableStorageProvider<TeamTableEntity, Guid>, TeamTableStorageProvider>()
+                   .AddSingleton<ITableStorageProvider<UserTableEntity,Guid>, UserTableStorageProvider>();
             }
 
-            services.AddSingleton<IUserRepository, UserRepository>()
-                .AddSingleton<ITeamRepository, TeamRepository>();
+            services.AddProjectsRepository()
+                .AddTeamsRepository()
+                .AddUserRepository();
 
-            services.AddSingleton<TeamsController>(); //no idea if this should be singleton or not but the visual studio template used singleton
+            services.AddSingleton<TeamsController>()
+                .AddSingleton<ProjectsController>()
+                .AddSingleton<UsersController>(); //no idea if this should be singleton or not but the visual studio template used singleton
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

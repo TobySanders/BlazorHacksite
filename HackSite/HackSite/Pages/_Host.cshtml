@@ -32,5 +32,14 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
+
+    <script>
+        function CopyProjectShareUrl() {
+            var copyRef = document.getElementById("projectShareUrlInput");
+            console.log("copyref is " + copyRef);
+            copyRef.select();
+            document.execCommand("copy");
+        }
+    </script>
 </body>
 </html>

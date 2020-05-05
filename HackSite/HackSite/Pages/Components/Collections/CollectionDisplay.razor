@@ -1,0 +1,46 @@
+﻿
+@*@using HackSite.Controllers
+@using HackSite.Pages.Components.Links
+@using HackSite.Pages.Components.Collections.Fragments
+
+@typeparam TItem
+@typeparam TKey
+
+<div class="card">
+    <h3 class="card-title"></h3>
+    <div class="card-body">
+        <ul class="list-group">
+            @foreach (var item in Items)
+            {
+                var fragment = new SelectableListFragment<TItem, TKey>
+                {
+                    Item = item
+                };
+                @RowItem().Method.Attributes
+            }
+        </ul>
+    </div>
+</div>
+
+@code{
+    [Parameter]
+    public IReadOnlyList<TItem> Items { get; set; }
+    [Parameter]
+    public RenderFragment<SelectableListFragment<TItem,TKey>> RowItem { get; set; }
+
+    public List<TKey> SelectedProjects = new List<TKey>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Items = await ProjectsController.GetProjectsAsync();
+    }
+
+    private void OnItemSelected(TKey id)
+    {
+        SelectedProjects.Add(id);
+    }
+    private void OnItemDeselcted(TKey id)
+    {
+        SelectedProjects.Remove(id);
+    }
+}*@

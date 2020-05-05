@@ -1,45 +1,49 @@
 ﻿@page "/Teams"
 
 @using HackSite.Controllers
-@using HackSite.ViewModels
-@inject TeamsController TeamsController
+@using HackSite.Views
+@using HackSite.Pages.Components
 
-<h1>Weather forecast</h1>
+@inject TeamsController TeamsController
+@inject ProjectsController ProjectsController
+
+<h1>Teams and Projects</h1>
 
 <p>This component demonstrates fetching data from a service.</p>
 
-@if (teamsView == null)
+@if (teamViews == null || projectViews == null)
 {
-    <p><em>Loading...</em></p>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                <span class="sr-only">Just finishing up...</span>
+            </div>
+        </div>
+    </div>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Project Title</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var team in teamsView.Teams)
-            {
-                <tr>
-                    <td>@team.Id</td>
-                    <td>@team.Name</td>
-                    <td>@team.project.Title</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <h2>Teams</h2>
+    <div class="container">
+        @foreach (var team in teamViews)
+        {
+            <div class="row mb-1">
+                <div class="col">
+                    <TeamPreviewComponent TeamView="@team"></TeamPreviewComponent>
+                </div>
+            </div>
+        }
+    </div>
 }
 
 @code {
-    private GetTeamsView teamsView;
+
+    private TeamView[] teamViews;
+    private ProjectView[] projectViews;
 
     protected override async Task OnInitializedAsync()
     {
-        teamsView = await TeamsController.GetTeamsAsync();
+        teamViews = await TeamsController.GetTeamsAsync();
+        projectViews = await ProjectsController.GetProjectsAsync();
     }
 }

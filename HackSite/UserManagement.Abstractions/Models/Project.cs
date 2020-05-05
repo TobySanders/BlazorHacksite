@@ -1,10 +1,14 @@
-﻿namespace UserManagement.Abstractions.Models
+﻿using System;
+
+namespace UserManagement.Abstractions.Models
 {
-    public class Project
+    public class Project : IEntity<Guid>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string GithubUrl { get; set; }
+        public string RepositoryUrl { get; set; }
+
+        public Guid Key => Id;
     }
 }

@@ -1,0 +1,39 @@
+﻿<div class="row">
+    <div class="col-12">
+        <div class="alert alert-@MessageAlertType.ToString().ToLower()" role="alert">
+            @if (Header != null)
+            {
+                <h4 class="alert-heading">@Header</h4>
+            }
+
+            <p>@BodyBefore</p>
+            @if (BodyAfter != null)
+            {
+                <hr>
+                <p class="mb-0">@BodyAfter</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Header { get; set; }
+
+    [Parameter]
+    public string BodyBefore { get; set; }
+
+    [Parameter]
+    public string BodyAfter { get; set; }
+
+    /// <summary>
+    /// Primary, Secondary, Success, Warning, Danger, Info, Light, Dark
+    /// </summary>
+    [Parameter]
+    public AlertType MessageAlertType { get; set; }
+
+    public enum AlertType
+    {
+        Primary, Secondary, Success, Warning, Danger, Info, Light, Dark
+    }
+}

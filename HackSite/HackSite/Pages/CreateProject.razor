@@ -1,0 +1,87 @@
+﻿@page "/Projects/Create"
+@using HackSite.Pages.Shared
+@using HackSite.Views
+@using HackSite.Pages.Components
+
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavManager
+
+
+
+@if (_currentStep == null)
+{
+    <h1>Create Project</h1>
+
+    <p>To create a new project, fill in the details below. Once the project is created, you'll be given a unique link to share with your team members so they can join.</p>
+
+    <CreateProjectComponent OnProjectCreated="OnProjectCreated" OnExecutionFailed="OnExecutionFailed"></CreateProjectComponent>
+    if (_executionFailed)
+    {
+        <PageMessage MessageAlertType="PageMessage.AlertType.Danger"
+                     Header="Something went wrong!"
+                     BodyBefore="Looks like something went wrong on our end. This issue is reported to the relevant team automatically and it will be fixed as soon as possible. Sorry for the inconvenience!" />
+    }
+
+}
+
+else if (_currentStep == 1)
+{
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="selectorContainer mb-3">
+                <h1 class="display-4 setupHeader">
+                    <i class="fas fa-check-circle text-success" /> Nice One
+                </h1>
+                <p class="lead text-left">
+                    Your project @_projectView.Title has been created successfully. You can send the link below to your teammates so they can join this project too!
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6 text-center">
+            <div class="input-group mb-3">
+                <input type="text"
+                       class="form-control"
+                       id="projectShareUrlInput"
+                       value="@_projectShareUrl" readonly>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary"
+                            type="button"
+                            id="js-copyjoincode"
+                            @onclick="async() => await CopyProjectUrlToClipboard()">
+                        <i class="fas fa-copy" />
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-3"></div>
+    </div>
+}
+
+
+@code {
+    private string _projectShareUrl;
+    private ProjectView _projectView;
+    private ushort? _currentStep;
+    private bool _executionFailed = false;
+
+
+    private async Task CopyProjectUrlToClipboard()
+    {
+        await JSRuntime.InvokeAsync<object>("CopyProjectShareUrl");
+    }
+
+    private void OnProjectCreated(ProjectView projectView)
+    {
+        _projectView = projectView;
+        _projectShareUrl = $"{NavManager.BaseUri}Projects/{_projectView.Id}";
+        _currentStep = 1;
+    }
+    private void OnExecutionFailed(Exception e)
+    {
+        //do something with e
+        _executionFailed = true;
+    }
+}

@@ -1,0 +1,41 @@
+﻿@page "/Users/{guidString}"
+
+@using HackSite.Controllers;
+@using HackSite.Views;
+@using HackSite.Pages.Components
+@inject UsersController UsersController
+
+<h3>Team Details</h3>
+
+@if (_userView == null)
+{
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;" role="status">
+                <span class="sr-only">Just finishing up...</span>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <UserCard UserView="@_userView"></UserCard>
+}
+
+@code {
+    [Parameter]
+    public String GuidString { get; set; }
+
+    private Guid _userGuid;
+    private UserView _userView;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Guid.TryParse(GuidString, out _userGuid);
+
+        if (_userGuid != Guid.Empty)
+        {
+            _userView = await UsersController.GetUserAsync(_userGuid);
+        }
+    }
+}

@@ -1,0 +1,35 @@
+﻿@using HackSite.Views
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title">
+            @ProjectView.Title
+        </h3>
+        <p class="card-text text-muted">
+            @ProjectView.Description
+        </p>
+        <div class="container ">
+            <div class="row justify-content-md-center">
+                <div class="col-4">
+                    <a class="btn btn-primary" href="Projects/@ProjectView.Id">View Project</a>
+                </div>
+                @if (!String.IsNullOrWhiteSpace(ProjectView.RepositoryUrl))
+                {
+                    <div class="col-4">
+                        <a class="btn btn-primary" href="@ProjectView.RepositoryUrl">Fork me on Github!</a>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@code{
+    [Parameter]
+    public ProjectView ProjectView { get; set; }
+
+    public void ViewProjectClick()
+    {
+        //Go To Projects Page
+    }
+}
